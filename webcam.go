@@ -29,8 +29,8 @@ func main() {
 
 	cli := &client_vehicle_robot.ClientVehicleRobot{
 		Client: client.Client{
-			Host: "localhost",
-			Port: 9900,
+			Host: "www.profzone.net",
+			Port: 50999,
 			Mode: "grpc",
 		},
 	}
