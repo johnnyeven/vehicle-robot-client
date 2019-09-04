@@ -1,0 +1,251 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "paths": {
+    "/vehicle-robot": {
+      "get": {
+        "tags": [
+          "vendor/github.com/johnnyeven/libtools/courier/swagger"
+        ],
+        "operationId": "Swagger",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JSONBytes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehicle-robot/v0/detections/object": {
+      "post": {
+        "tags": [
+          "v0/detaction"
+        ],
+        "summary": "物体检测",
+        "operationId": "ObjectDetection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObjectDetectionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DetectivedObject"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "@httpError(500000000,InternalError,\"内部处理错误\",\"\",false);\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DetectivedObject": {
+        "type": "object",
+        "properties": {
+          "box": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "float"
+            },
+            "x-go-json": "box",
+            "x-go-name": "Box"
+          },
+          "class": {
+            "type": "number",
+            "format": "float",
+            "x-go-json": "class",
+            "x-go-name": "Class"
+          },
+          "probability": {
+            "type": "number",
+            "format": "float",
+            "x-go-json": "probability",
+            "x-go-name": "Probability"
+          }
+        },
+        "required": [
+          "class",
+          "box",
+          "probability"
+        ],
+        "x-go-named": "github.com/johnnyeven/service-vehicle-robot/routes/v0/detaction.DetectivedObject"
+      },
+      "ErrorField": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "出错字段路径\n这个信息为一个 json 字符串,方便客户端进行定位错误原因\n例如输入中 {\"name\":{ \"alias\" : \"test\"}} 中的alias出错,则返回 \"name.alias\"\n如果alias是数组, 且第2个元素的a字段错误,则返回\"name.alias[2].a\"",
+            "x-go-json": "field",
+            "x-go-name": "Field",
+            "x-tag-xml": "field"
+          },
+          "in": {
+            "type": "string",
+            "description": "错误字段位置\nbody, query, header, path, formData",
+            "x-go-json": "in",
+            "x-go-name": "In",
+            "x-tag-xml": "in"
+          },
+          "msg": {
+            "type": "string",
+            "description": "错误信息",
+            "x-go-json": "msg",
+            "x-go-name": "Msg",
+            "x-tag-xml": "msg"
+          }
+        },
+        "required": [
+          "field",
+          "msg",
+          "in"
+        ],
+        "x-go-named": "github.com/johnnyeven/service-vehicle-robot/vendor/github.com/johnnyeven/libtools/courier/status_error.ErrorField"
+      },
+      "ErrorFields": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ErrorField"
+        },
+        "x-go-named": "github.com/johnnyeven/service-vehicle-robot/vendor/github.com/johnnyeven/libtools/courier/status_error.ErrorFields"
+      },
+      "JSONBytes": {
+        "type": "string",
+        "format": "json",
+        "x-go-named": "github.com/johnnyeven/service-vehicle-robot/vendor/github.com/johnnyeven/libtools/courier/swagger.JSONBytes"
+      },
+      "ObjectDetectionBody": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8"
+            },
+            "x-go-json": "image",
+            "x-go-name": "Image"
+          }
+        },
+        "required": [
+          "image"
+        ],
+        "x-go-named": "github.com/johnnyeven/service-vehicle-robot/routes/v0/detaction.ObjectDetectionBody"
+      },
+      "StatusError": {
+        "type": "object",
+        "properties": {
+          "canBeTalkError": {
+            "type": "boolean",
+            "description": "是否能作为错误话术",
+            "x-go-json": "canBeTalkError",
+            "x-go-name": "CanBeErrorTalk",
+            "x-tag-xml": "canBeTalkError"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int64",
+            "description": "错误代码",
+            "x-go-json": "code",
+            "x-go-name": "Code",
+            "x-tag-xml": "code"
+          },
+          "desc": {
+            "type": "string",
+            "description": "详细描述",
+            "x-go-json": "desc",
+            "x-go-name": "Desc",
+            "x-tag-xml": "desc"
+          },
+          "errorFields": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorFields"
+              },
+              {
+                "description": "出错字段"
+              }
+            ],
+            "x-go-json": "errorFields",
+            "x-go-name": "ErrorFields",
+            "x-tag-xml": "errorFields"
+          },
+          "id": {
+            "type": "string",
+            "description": "请求 ID",
+            "x-go-json": "id",
+            "x-go-name": "ID",
+            "x-tag-xml": "id"
+          },
+          "key": {
+            "type": "string",
+            "description": "错误 Key",
+            "x-go-json": "key",
+            "x-go-name": "Key",
+            "x-tag-xml": "key"
+          },
+          "msg": {
+            "type": "string",
+            "description": "错误信息",
+            "x-go-json": "msg",
+            "x-go-name": "Msg",
+            "x-tag-xml": "msg"
+          },
+          "source": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "错误溯源",
+            "x-go-json": "source",
+            "x-go-name": "Source",
+            "x-tag-xml": "source"
+          }
+        },
+        "required": [
+          "key",
+          "code",
+          "msg",
+          "desc",
+          "canBeTalkError",
+          "source",
+          "id",
+          "errorFields"
+        ],
+        "x-go-named": "github.com/johnnyeven/service-vehicle-robot/vendor/github.com/johnnyeven/libtools/courier/status_error.StatusError"
+      }
+    }
+  }
+}
