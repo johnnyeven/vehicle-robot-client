@@ -18,12 +18,9 @@ type WindowDriver struct {
 
 // NewWindowDriver creates a new window driver.
 // It adds an start function to initialize window
-func NewWindowDriver(name string) *WindowDriver {
-	if name == "" {
-		name = "Window"
-	}
+func NewWindowDriver() *WindowDriver {
 	return &WindowDriver{
-		name: name,
+		name: "Window",
 		start: func(w *WindowDriver) {
 			w.window = gocv.NewWindow(w.Name())
 		},

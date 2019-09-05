@@ -15,6 +15,12 @@
 			"revisionTime": "2018-08-30T22:02:26Z"
 		},
 		{
+			"checksumSHA1": "K6icEVf2CuBzhLm/MGpRd1btshM=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "1a676ac6e4dce68e9303a1800773861350374a9e",
+			"revisionTime": "2018-03-08T10:03:10Z"
+		},
+		{
 			"checksumSHA1": "aliMQtSWXJmKuxpZRxU8yomjd2I=",
 			"path": "github.com/gobuffalo/uuid",
 			"revision": "3f701655805f1ef76e9963d1b377497a0c66d7cd",
@@ -63,10 +69,10 @@
 			"revisionTime": "2017-11-29T19:10:14Z"
 		},
 		{
-			"checksumSHA1": "hoilQzrHNOxF5Tc6ctXNTDpv4ck=",
+			"checksumSHA1": "ajAqUByI39Sfm99F/ZNOguPP3Mk=",
 			"path": "github.com/gorilla/websocket",
-			"revision": "ae1634f6a98965ded3b8789c626cb4e0bd78c3de",
-			"revisionTime": "2019-06-29T18:55:28Z"
+			"revision": "c3e18be99d19e6b3e8f1559eea2c161a665c4b6b",
+			"revisionTime": "2019-08-25T01:20:11Z"
 		},
 		{
 			"checksumSHA1": "ByRdQMv2yl16W6Tp9gUW1nNmpuI=",
@@ -141,142 +147,202 @@
 			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
+			"checksumSHA1": "B5bFknJjXk2/90iRByRAxUNRrQg=",
+			"path": "github.com/johnnyeven/libtools/clients/client_configurations",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
 			"checksumSHA1": "BFQR9OPWYz7e7Oe9eP2NDASoaks=",
 			"path": "github.com/johnnyeven/libtools/conf",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "0gE8MXWMbMRUc3Kqz3E1XbWMGDY=",
+			"path": "github.com/johnnyeven/libtools/config_agent",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "69txjtq43bcpcLCTGWhYxOmGeGU=",
 			"path": "github.com/johnnyeven/libtools/courier",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "BMhv217roTJ+3LCqaeXDFcrxarY=",
 			"path": "github.com/johnnyeven/libtools/courier/client",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "c+N5ksRHsPzCAxrvD+m/y/DtmVs=",
+			"path": "github.com/johnnyeven/libtools/courier/enumeration",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "NYxk2KPtkb/oGq0Q1IHuB9QF32Y=",
 			"path": "github.com/johnnyeven/libtools/courier/httpx",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
-			"checksumSHA1": "knDFtOm3mYEQtKBzbEO18nUG0r0=",
+			"checksumSHA1": "wRtopK1GiCyWF8ZHSMqJ+/znA8A=",
 			"path": "github.com/johnnyeven/libtools/courier/status_error",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "QkTiIOIrkDAos3jBn6VG70fJvEM=",
 			"path": "github.com/johnnyeven/libtools/courier/swagger",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "6nejN/Q3uT5zVSHeTYkZtuwDrs8=",
 			"path": "github.com/johnnyeven/libtools/courier/transport_grpc",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "eMRw6AOY9Z6DUO8OVsJ+K5Z0gt4=",
 			"path": "github.com/johnnyeven/libtools/courier/transport_http",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "xQn1X658m6t21kB5WQFVyc8SSVc=",
 			"path": "github.com/johnnyeven/libtools/courier/transport_http/transform",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "MEdikhzbGJyZR4576rQiEOYdy/s=",
 			"path": "github.com/johnnyeven/libtools/docker",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "tCFEvmX1jTWpZrdw1/9oFlwrzTY=",
 			"path": "github.com/johnnyeven/libtools/duration",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "b6Z4c/dKYsT14vsRoMnWeiovhbQ=",
 			"path": "github.com/johnnyeven/libtools/env",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "Lx6VApqmoQuMb2vYwEPRDOjEsAY=",
 			"path": "github.com/johnnyeven/libtools/executil",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "lSQAvAWBj9DLMO7zSaAWKHR0BY8=",
 			"path": "github.com/johnnyeven/libtools/godash",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "OnBJJd3T+CUi4h+zt6W5HhCtDJs=",
 			"path": "github.com/johnnyeven/libtools/log/context",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "69ldo9aan7fWQZuNODrgZXgVz6s=",
 			"path": "github.com/johnnyeven/libtools/ptr",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "fTp8XtOz5vbdF/gHpdgsce6iUTc=",
 			"path": "github.com/johnnyeven/libtools/reflectx",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "6jqzEH5uqnjmDG8zTW7CDgzXljQ=",
 			"path": "github.com/johnnyeven/libtools/service/dockerizier",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "9F5IPI0K5zXhog2+IXQxgAZQmKc=",
 			"path": "github.com/johnnyeven/libtools/servicex",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "mK1XUAbY10DjEeKg5P4FoFyDL3U=",
 			"path": "github.com/johnnyeven/libtools/servicex/internal",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "y2zz6cn+kiSLjKNnpcWZVl6ejPc=",
+			"path": "github.com/johnnyeven/libtools/sqlx",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "OAIiylfnYeCL53vzzmrdfkOLwJk=",
+			"path": "github.com/johnnyeven/libtools/sqlx/builder",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "zlsIJ991yVPstuC8xIh+Wp5gTCw=",
+			"path": "github.com/johnnyeven/libtools/sqlx/data_type",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "QnoQdqzs3Tyb3v0LN2BLOePlOC4=",
+			"path": "github.com/johnnyeven/libtools/sqlx/mysql_logger_driver",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "fIYIy8qE8HVaoy2+CFRk1phASAY=",
+			"path": "github.com/johnnyeven/libtools/sqlx/presets",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "AhU/fDhlY9g3cYzWmTAsHFpZG8I=",
 			"path": "github.com/johnnyeven/libtools/strutil",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "qcq5snNZa6XJfz7z/w5UjPRvMJ0=",
+			"path": "github.com/johnnyeven/libtools/timelib",
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "8zSEVoeVfdSsohROFIhWBVhzEGw=",
 			"path": "github.com/johnnyeven/libtools/validate",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
 			"checksumSHA1": "YSgHvU6kJLnhQqR2NBxdHDvGS1Q=",
 			"path": "github.com/johnnyeven/libtools/validate/validatetpl",
-			"revision": "b2d17c74eb6b044b46703cb1bff89e10d55332da",
-			"revisionTime": "2019-09-04T06:59:17Z"
+			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
+			"revisionTime": "2019-09-05T15:12:34Z"
+		},
+		{
+			"checksumSHA1": "b+dlJJk65e0KZ9AhVS+ZLl6Xxrk=",
+			"path": "github.com/johnnyeven/service-vehicle-robot/constants/types",
+			"revision": "8ff660e8149df5b2492587788d3d35fc742ececf",
+			"revisionTime": "2019-09-05T15:16:31Z"
 		},
 		{
 			"checksumSHA1": "T+kh2poktvucf6QrY3nRo09otto=",
@@ -395,58 +461,58 @@
 			"revisionTime": "2019-05-23T12:40:21Z"
 		},
 		{
-			"checksumSHA1": "BGm8lKZmvJbf/YOJLeL1rw2WVjA=",
+			"checksumSHA1": "Zsm3tvgRFJOt3afwwhrGymcSZgg=",
 			"path": "golang.org/x/crypto/ssh/terminal",
-			"revision": "d6449816ce06963d9d136eee5a56fca5b0616e7e",
-			"revisionTime": "2018-04-11T15:42:50Z"
+			"revision": "9756ffdc24725223350eb3266ffb92590d28f278",
+			"revisionTime": "2019-08-28T23:00:48Z"
 		},
 		{
 			"checksumSHA1": "pCY4YtdNKVBYRbNvODjx8hj0hIs=",
 			"path": "golang.org/x/net/http/httpguts",
-			"revision": "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a",
-			"revisionTime": "2019-06-18T06:14:54Z"
+			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
+			"revisionTime": "2019-08-26T16:14:39Z"
 		},
 		{
-			"checksumSHA1": "1cJfoEW+LwmEUFcW1XNvhvjGaek=",
+			"checksumSHA1": "OFD7WBDirxGoXpZlDPsMv/gKcEY=",
 			"path": "golang.org/x/net/http2",
-			"revision": "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a",
-			"revisionTime": "2019-06-18T06:14:54Z"
+			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
+			"revisionTime": "2019-08-26T16:14:39Z"
 		},
 		{
 			"checksumSHA1": "VJwSx33rjMC7O6K2O50Jw6o1vw4=",
 			"path": "golang.org/x/net/http2/hpack",
-			"revision": "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a",
-			"revisionTime": "2019-06-18T06:14:54Z"
+			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
+			"revisionTime": "2019-08-26T16:14:39Z"
 		},
 		{
 			"checksumSHA1": "vL6l4FZWitsxht0uqA/GpDNkNNc=",
 			"path": "golang.org/x/net/idna",
-			"revision": "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a",
-			"revisionTime": "2019-06-18T06:14:54Z"
+			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
+			"revisionTime": "2019-08-26T16:14:39Z"
 		},
 		{
 			"checksumSHA1": "UxahDzW2v4mf/+aFxruuupaoIwo=",
 			"path": "golang.org/x/net/internal/timeseries",
-			"revision": "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a",
-			"revisionTime": "2019-06-18T06:14:54Z"
+			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
+			"revisionTime": "2019-08-26T16:14:39Z"
 		},
 		{
 			"checksumSHA1": "HvmG9LfStMLF+hIC7xR4SxegMis=",
 			"path": "golang.org/x/net/trace",
-			"revision": "b5b0513f8c1bb7c1e3e6f168fba117131fe2614a",
-			"revisionTime": "2019-06-18T06:14:54Z"
+			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
+			"revisionTime": "2019-08-26T16:14:39Z"
 		},
 		{
-			"checksumSHA1": "W4WUc5zv0Wb7HCqm1jeHgc5G6e0=",
+			"checksumSHA1": "064stJ5spsAjBhM8lMZYfaVdFM8=",
 			"path": "golang.org/x/sys/unix",
-			"revision": "fae7ac547cb717d141c433a2a173315e216b64c4",
-			"revisionTime": "2019-07-11T09:16:12Z"
+			"revision": "749cb33beabd9aa6d3178e3de05bcc914f70b2bf",
+			"revisionTime": "2019-09-04T09:25:27Z"
 		},
 		{
-			"checksumSHA1": "fHxZYYJbqy8dddj7+eQsS5CrB6M=",
+			"checksumSHA1": "U4rR1I0MXcvJz3zSxTp3hb3Y0I0=",
 			"path": "golang.org/x/sys/windows",
-			"revision": "fae7ac547cb717d141c433a2a173315e216b64c4",
-			"revisionTime": "2019-07-11T09:16:12Z"
+			"revision": "749cb33beabd9aa6d3178e3de05bcc914f70b2bf",
+			"revisionTime": "2019-09-04T09:25:27Z"
 		},
 		{
 			"checksumSHA1": "CbpjEkkOeh0fdM/V8xKDdI0AA88=",

@@ -24,6 +24,7 @@ func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.Camer
 		}
 
 		b := sourceImg.Bounds()
+		fmt.Println(b.Dx(), b.Dy())
 		img := image.NewRGBA(b)
 		draw.Draw(img, b, sourceImg, b.Min, draw.Src)
 

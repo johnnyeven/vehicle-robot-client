@@ -1,0 +1,23 @@
+version: "2"
+services:
+  vehicle-robot-client:
+    image: ${PROFZONE_DOCKER_REGISTRY}/${PROJECT_GROUP}/${PROJECT_NAME}:${PROJECT_VERSION}
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.start_once: "true"
+      project.description: ${PROJECT_DESCRIPTION}
+      project.group: ${PROJECT_GROUP}
+      project.name: ${PROJECT_NAME}
+      project.version: ${PROJECT_VERSION}
+    environment:
+      GOENV: ${GOENV}
+      S_CONFIGAGENT_HOST: ${S_CONFIGAGENT_HOST}
+      S_CONFIGAGENT_MODE: ${S_CONFIGAGENT_MODE}
+      S_CONFIGAGENT_PORT: ${S_CONFIGAGENT_PORT}
+      S_CONFIGAGENT_PULLCONFIGINTERVAL: ${S_CONFIGAGENT_PULLCONFIGINTERVAL}
+      S_CONFIGAGENT_STACKID: ${S_CONFIGAGENT_STACKID}
+      S_CONFIGAGENT_TIMEOUT: ${S_CONFIGAGENT_TIMEOUT}
+    dns_search:
+    - rancher.internal
+    dns:
+    - 169.254.169.250
