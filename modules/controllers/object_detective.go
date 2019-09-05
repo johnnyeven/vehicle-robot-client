@@ -28,7 +28,7 @@ func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.Camer
 		draw.Draw(img, b, sourceImg, b.Min, draw.Src)
 
 		buf := bytes.NewBuffer([]byte{})
-		err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 100})
+		err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 75})
 		if err != nil {
 			fmt.Println("jpeg.Encode err: ", err.Error())
 			return
