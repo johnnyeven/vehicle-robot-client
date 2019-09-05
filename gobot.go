@@ -29,58 +29,60 @@ func main() {
 	cli.MarshalDefaults(cli)
 
 	work := func() {
-		err := camera.On(opencv.Frame, func(data interface{}) {
-			cameraImage := data.(gocv.Mat)
 
-			sourceImg, err := cameraImage.ToImage()
-			if err != nil {
-				fmt.Println("cameraImage.ToImag err: ", err.Error())
-				return
-			}
+	}
 
-			b := sourceImg.Bounds()
-			img := image.NewRGBA(b)
-			draw.Draw(img, b, sourceImg, b.Min, draw.Src)
+	err := camera.On(opencv.Frame, func(data interface{}) {
+		cameraImage := data.(gocv.Mat)
 
-			buf := bytes.NewBuffer([]byte{})
-			err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 100})
-			if err != nil {
-				fmt.Println("jpeg.Encode err: ", err.Error())
-				return
-			}
-
-			request := client_vehicle_robot.ObjectDetectionRequest{
-				Body: client_vehicle_robot.ObjectDetectionBody{
-					Image: buf.Bytes(),
-				},
-			}
-			resp, err := cli.ObjectDetection(request)
-			if err != nil {
-				fmt.Println("request err: ", err)
-				return
-			}
-
-			for _, detectived := range resp.Body {
-				x1 := float32(img.Bounds().Max.X) * detectived.Box[1]
-				x2 := float32(img.Bounds().Max.X) * detectived.Box[3]
-				y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
-				y2 := float32(img.Bounds().Max.Y) * detectived.Box[2]
-
-				modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
-			}
-
-			targetImage, err := modules.ConvertImageToMat(img)
-			if err != nil {
-				fmt.Println("modules.ConvertImageToMat", err.Error())
-				return
-			}
-
-			window.IMShow(targetImage)
-			window.WaitKey(1)
-		})
+		sourceImg, err := cameraImage.ToImage()
 		if err != nil {
-
+			fmt.Println("cameraImage.ToImag err: ", err.Error())
+			return
 		}
+
+		b := sourceImg.Bounds()
+		img := image.NewRGBA(b)
+		draw.Draw(img, b, sourceImg, b.Min, draw.Src)
+
+		buf := bytes.NewBuffer([]byte{})
+		err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 100})
+		if err != nil {
+			fmt.Println("jpeg.Encode err: ", err.Error())
+			return
+		}
+
+		request := client_vehicle_robot.ObjectDetectionRequest{
+			Body: client_vehicle_robot.ObjectDetectionBody{
+				Image: buf.Bytes(),
+			},
+		}
+		resp, err := cli.ObjectDetection(request)
+		if err != nil {
+			fmt.Println("request err: ", err)
+			return
+		}
+
+		for _, detectived := range resp.Body {
+			x1 := float32(img.Bounds().Max.X) * detectived.Box[1]
+			x2 := float32(img.Bounds().Max.X) * detectived.Box[3]
+			y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
+			y2 := float32(img.Bounds().Max.Y) * detectived.Box[2]
+
+			modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
+		}
+
+		targetImage, err := modules.ConvertImageToMat(img)
+		if err != nil {
+			fmt.Println("modules.ConvertImageToMat err: ", err.Error())
+			return
+		}
+
+		window.IMShow(targetImage)
+		window.WaitKey(1)
+	})
+	if err != nil {
+		fmt.Println("camera.On err: ", err.Error())
 	}
 
 	robot := gobot.NewRobot("cameraBot",
