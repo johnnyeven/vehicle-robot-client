@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/johnnyeven/libtools/courier/client"
 	"github.com/johnnyeven/vehicle-robot-client/client_vehicle_robot"
+	"github.com/johnnyeven/vehicle-robot-client/modules"
 	"gocv.io/x/gocv"
 	"image"
 	"image/color"
@@ -82,7 +83,7 @@ func main() {
 		y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
 		y2 := float32(img.Bounds().Max.Y) * detectived.Box[2]
 
-		Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
+		modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
 		//addLabel(sourceImg, int(x1), int(y1), int(classes[curObj]), getLabel(curObj, probabilities, classes))
 	}
 
@@ -94,29 +95,5 @@ func main() {
 	err = jpeg.Encode(imageFile, img, &jpeg.Options{Quality: 75})
 	if err != nil {
 		fmt.Println(err.Error())
-	}
-}
-
-// HLine draws a horizontal line
-func HLine(img *image.RGBA, x1, y, x2 int, col color.Color) {
-	for ; x1 <= x2; x1++ {
-		img.Set(x1, y, col)
-	}
-}
-
-// VLine draws a veritcal line
-func VLine(img *image.RGBA, x, y1, y2 int, col color.Color) {
-	for ; y1 <= y2; y1++ {
-		img.Set(x, y1, col)
-	}
-}
-
-// Rect draws a rectangle utilizing HLine() and VLine()
-func Rect(img *image.RGBA, x1, y1, x2, y2, width int, col color.Color) {
-	for i := 0; i < width; i++ {
-		HLine(img, x1, y1+i, x2, col)
-		HLine(img, x1, y2+i, x2, col)
-		VLine(img, x1+i, y1, y2, col)
-		VLine(img, x2+i, y1, y2, col)
 	}
 }

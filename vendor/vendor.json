@@ -15,6 +15,18 @@
 			"revisionTime": "2018-08-30T22:02:26Z"
 		},
 		{
+			"checksumSHA1": "aliMQtSWXJmKuxpZRxU8yomjd2I=",
+			"path": "github.com/gobuffalo/uuid",
+			"revision": "3f701655805f1ef76e9963d1b377497a0c66d7cd",
+			"revisionTime": "2018-10-20T14:46:25Z"
+		},
+		{
+			"checksumSHA1": "s9C2MKOjpuvhfEIfoG6U9/DdMZ4=",
+			"path": "github.com/gofrs/uuid",
+			"revision": "abfe1881e60ef34074c1b8d8c63b42565c356ed6",
+			"revisionTime": "2019-05-10T20:42:58Z"
+		},
+		{
 			"checksumSHA1": "Y2MOwzNZfl4NRNDbLCZa6sgx7O0=",
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "e91709a02e0e8ff8b86b7aa913fdc9ae9498e825",
@@ -55,6 +67,18 @@
 			"path": "github.com/gorilla/websocket",
 			"revision": "ae1634f6a98965ded3b8789c626cb4e0bd78c3de",
 			"revisionTime": "2019-06-29T18:55:28Z"
+		},
+		{
+			"checksumSHA1": "ByRdQMv2yl16W6Tp9gUW1nNmpuI=",
+			"path": "github.com/hashicorp/errwrap",
+			"revision": "8a6fb523712970c966eefc6b39ed2c5e74880354",
+			"revisionTime": "2018-08-24T00:39:10Z"
+		},
+		{
+			"checksumSHA1": "QGgN03VUP9+jV+bcETFIBG0o0fM=",
+			"path": "github.com/hashicorp/go-multierror",
+			"revision": "bdca7bb83f603b80ef756bb953fe1dafa9cd00a2",
+			"revisionTime": "2019-07-22T21:38:33Z"
 		},
 		{
 			"checksumSHA1": "bWGI7DqWg6IdhfamV96OD+Esa+8=",
@@ -351,6 +375,18 @@
 			"path": "github.com/vmihailenco/msgpack/codes",
 			"revision": "935c5b540faab4d4922ae6f1fddcf77a726f259c",
 			"revisionTime": "2018-08-24T10:16:21Z"
+		},
+		{
+			"checksumSHA1": "qZaT15rNWYTID6gnTECt4DejDZY=",
+			"path": "gobot.io/x/gobot",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "s1OOOsgIDT40DtWdeOcg778cm2w=",
+			"path": "gobot.io/x/gobot/platforms/opencv",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
 		},
 		{
 			"checksumSHA1": "PT/H4YhFXpIRuDF0YHu765q0VuM=",
