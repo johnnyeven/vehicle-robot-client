@@ -36,6 +36,7 @@ func main() {
 			sourceImg, err := cameraImage.ToImage()
 			if err != nil {
 				fmt.Println(err.Error())
+				return
 			}
 
 			b := sourceImg.Bounds()
@@ -46,6 +47,7 @@ func main() {
 			err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 100})
 			if err != nil {
 				fmt.Println(err.Error())
+				return
 			}
 
 			request := client_vehicle_robot.ObjectDetectionRequest{
@@ -56,6 +58,7 @@ func main() {
 			resp, err := cli.ObjectDetection(request)
 			if err != nil {
 				fmt.Println("request err: ", err)
+				return
 			}
 
 			for _, detectived := range resp.Body {
@@ -70,10 +73,12 @@ func main() {
 			targetImage, err := modules.ConvertImageToMat(img)
 			if err != nil {
 				fmt.Println(err.Error())
+				return
 			}
 			defer targetImage.Close()
 
 			window.IMShow(targetImage)
+			window.WaitKey(1)
 		})
 		if err != nil {
 
