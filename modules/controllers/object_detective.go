@@ -1,12 +1,10 @@
-package main
+package controllers
 
 import (
 	"bytes"
 	"fmt"
-	"github.com/johnnyeven/libtools/courier/client"
 	"github.com/johnnyeven/vehicle-robot-client/client_vehicle_robot"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
-	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/opencv"
 	"gocv.io/x/gocv"
 	"image"
@@ -15,23 +13,7 @@ import (
 	"image/jpeg"
 )
 
-func main() {
-	window := gocv.NewWindow("Detective")
-	camera := opencv.NewCameraDriver(0)
-
-	cli := &client_vehicle_robot.ClientVehicleRobot{
-		Client: client.Client{
-			Host: "www.profzone.net",
-			Port: 50999,
-			Mode: "grpc",
-		},
-	}
-	cli.MarshalDefaults(cli)
-
-	work := func() {
-
-	}
-
+func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli client_vehicle_robot.ClientVehicleRobotInterface) {
 	err := camera.On(opencv.Frame, func(data interface{}) {
 		cameraImage := data.(gocv.Mat)
 
@@ -78,17 +60,10 @@ func main() {
 			return
 		}
 
-		window.IMShow(targetImage)
+		window.ShowImage(targetImage)
 		window.WaitKey(1)
 	})
 	if err != nil {
 		fmt.Println("camera.On err: ", err.Error())
 	}
-
-	robot := gobot.NewRobot("cameraBot",
-		[]gobot.Device{camera},
-		work,
-	)
-
-	robot.Start()
 }
