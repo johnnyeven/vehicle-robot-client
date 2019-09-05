@@ -31,11 +31,10 @@ func main() {
 	work := func() {
 		err := camera.On(opencv.Frame, func(data interface{}) {
 			cameraImage := data.(gocv.Mat)
-			defer cameraImage.Close()
 
 			sourceImg, err := cameraImage.ToImage()
 			if err != nil {
-				fmt.Println(err.Error())
+				fmt.Println("cameraImage.ToImag err: ", err.Error())
 				return
 			}
 
@@ -46,7 +45,7 @@ func main() {
 			buf := bytes.NewBuffer([]byte{})
 			err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 100})
 			if err != nil {
-				fmt.Println(err.Error())
+				fmt.Println("jpeg.Encode err: ", err.Error())
 				return
 			}
 
@@ -72,10 +71,9 @@ func main() {
 
 			targetImage, err := modules.ConvertImageToMat(img)
 			if err != nil {
-				fmt.Println(err.Error())
+				fmt.Println("modules.ConvertImageToMat", err.Error())
 				return
 			}
-			defer targetImage.Close()
 
 			window.IMShow(targetImage)
 			window.WaitKey(1)
