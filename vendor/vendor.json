@@ -3,6 +3,12 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "7Z8kodwrFTBqG4SS6PedfvWieFM=",
+			"path": "github.com/creack/goselect",
+			"revision": "c98c4e62c41618cf78d3ff759af0d4dbaa677748",
+			"revisionTime": "2019-04-25T18:50:09Z"
+		},
+		{
 			"checksumSHA1": "VsE3zx2d8kpwj97TWhYddzAwBrY=",
 			"path": "github.com/fatih/color",
 			"revision": "507f6050b8568533fb3f5504de8e5205fa62a114",
@@ -13,6 +19,66 @@
 			"path": "github.com/fsnotify/fsnotify",
 			"revision": "ccc981bf80385c528a65fbfdd49bf2d8da22aa23",
 			"revisionTime": "2018-08-30T22:02:26Z"
+		},
+		{
+			"checksumSHA1": "38zypoBk7UiwUHMI1K5w44w/D+8=",
+			"path": "github.com/go-ble/ble",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "VHdJZyh2vPIyXawfU+trqxONx+c=",
+			"path": "github.com/go-ble/ble/darwin",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "dOA9UVU+2oUVNuZKEM3t1xSQwNQ=",
+			"path": "github.com/go-ble/ble/linux",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "4RAl/OkRVkxvcNkw6fgTaRMhdT0=",
+			"path": "github.com/go-ble/ble/linux/adv",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "rBXEEdpLmR2UJs2G6EHFgok3DV8=",
+			"path": "github.com/go-ble/ble/linux/att",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "WqgNpx8pDDV/mOiqtvEvjVUvXy4=",
+			"path": "github.com/go-ble/ble/linux/gatt",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "8r3qZhBg8A6ftAxA0+BOZjZCeac=",
+			"path": "github.com/go-ble/ble/linux/hci",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "PiDNfwOOKUqF1wAJJ1K4P853Zj8=",
+			"path": "github.com/go-ble/ble/linux/hci/cmd",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "8muXD+QQ8BpPZU3v7eMNMvUaQpI=",
+			"path": "github.com/go-ble/ble/linux/hci/evt",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
+		},
+		{
+			"checksumSHA1": "aOcCosp9o12vfZevrdTwCeBj9Fg=",
+			"path": "github.com/go-ble/ble/linux/hci/socket",
+			"revision": "147700f13610085f7387692cd6663a67c495ab87",
+			"revisionTime": "2019-05-21T17:15:21Z"
 		},
 		{
 			"checksumSHA1": "K6icEVf2CuBzhLm/MGpRd1btshM=",
@@ -371,6 +437,18 @@
 			"revisionTime": "2018-02-13T13:34:03Z"
 		},
 		{
+			"checksumSHA1": "CIK3BBNX3nuUQCmNqTQydNfMNKI=",
+			"path": "github.com/mgutz/ansi",
+			"revision": "9520e82c474b0a04dd04f8a40959027271bab992",
+			"revisionTime": "2017-02-06T15:57:36Z"
+		},
+		{
+			"checksumSHA1": "DUdWW5gRHBk2zTxGQZoH1KLxFtc=",
+			"path": "github.com/mgutz/logxi/v1",
+			"revision": "aebf8a7d67ab4625e0fd4a665766fef9a709161b",
+			"revisionTime": "2016-10-27T14:08:23Z"
+		},
+		{
 			"checksumSHA1": "J+g0oZePWp2zSIISD2dZZKTxmgg=",
 			"path": "github.com/mitchellh/mapstructure",
 			"revision": "3536a929edddb9a5b34bd6861dc4a9647cb459fe",
@@ -381,6 +459,30 @@
 			"path": "github.com/pelletier/go-toml",
 			"revision": "27c6b39a135b7dc87a14afb068809132fb7a9a8f",
 			"revisionTime": "2018-11-24T00:27:27Z"
+		},
+		{
+			"checksumSHA1": "I7hloldMJZTqUx6hbVDp5nk9fZQ=",
+			"path": "github.com/pkg/errors",
+			"revision": "27936f6d90f9c8e1145f11ed52ffffbfdb9e0af7",
+			"revisionTime": "2019-02-27T00:00:51Z"
+		},
+		{
+			"checksumSHA1": "X2HTO4w4tA28KNq9ilSUcwHX/tA=",
+			"path": "github.com/raff/goble/xpc",
+			"revision": "23577f989776a9ac1b1ded62ac52b25907b806bf",
+			"revisionTime": "2019-08-30T17:41:32Z"
+		},
+		{
+			"checksumSHA1": "bQ7M3uZGseGPclqKZBV14QsOk1w=",
+			"path": "github.com/sigurn/crc8",
+			"revision": "e55481d6f45c5a8f040343bace9013571dae103e",
+			"revisionTime": "2016-01-07T00:24:56Z"
+		},
+		{
+			"checksumSHA1": "29tEtwsJnCfvVJ24w4Nm23VCUP4=",
+			"path": "github.com/sigurn/utils",
+			"revision": "e1fefb11a1443cb504cb88b973005f995b085de6",
+			"revisionTime": "2019-07-28T11:00:27Z"
 		},
 		{
 			"checksumSHA1": "ySaT8G3I3y4MmnoXOYAAX0rC+p8=",
@@ -443,8 +545,50 @@
 			"revisionTime": "2018-08-24T10:16:21Z"
 		},
 		{
+			"checksumSHA1": "lmR6c50iyl4rXMFwEraI7SdY8Uw=",
+			"path": "go.bug.st/serial.v1",
+			"revision": "5f7892a7bb453066bdc6683b9b5d24d9dee03ec1",
+			"revisionTime": "2018-08-27T12:33:49Z"
+		},
+		{
+			"checksumSHA1": "VHSRiTzSHrOQd4HeUhRQNNUlhkg=",
+			"path": "go.bug.st/serial.v1/unixutils",
+			"revision": "5f7892a7bb453066bdc6683b9b5d24d9dee03ec1",
+			"revisionTime": "2018-08-27T12:33:49Z"
+		},
+		{
 			"checksumSHA1": "qZaT15rNWYTID6gnTECt4DejDZY=",
 			"path": "gobot.io/x/gobot",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "mr+MZG0wMlI3PnD1OxlECLbcy0c=",
+			"path": "gobot.io/x/gobot/drivers/gpio",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "z9/FMdpZh0FCB3pBzzfGzoJ/vtU=",
+			"path": "gobot.io/x/gobot/drivers/i2c",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "ixe9pKahnvDDkW1KOzBzYvzII2Y=",
+			"path": "gobot.io/x/gobot/platforms/ble",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "1VgT22FJz5YWgIVPBHqVg0nkcSE=",
+			"path": "gobot.io/x/gobot/platforms/firmata",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "cKe6e9D8NcXjy3wTQf/zvFE2v8s=",
+			"path": "gobot.io/x/gobot/platforms/firmata/client",
 			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
 			"revisionTime": "2019-05-23T12:37:01Z"
 		},
