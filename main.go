@@ -25,7 +25,8 @@ func main() {
 
 	robot := gobot.NewRobot("VehicleRobot",
 		[]gobot.Connection{firmataAdaptor},
-		[]gobot.Device{servoHorizon, servoVertical},
+		//[]gobot.Device{servoHorizon, servoVertical},
+		[]gobot.Device{window, camera, servoHorizon, servoVertical},
 		func() {
 			go controllers.CameraHolderController(servoHorizon, servoVertical)
 			go controllers.ObjectDetectiveController(window, camera, global.Config.RobotClient)
