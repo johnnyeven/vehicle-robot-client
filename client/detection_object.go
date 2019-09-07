@@ -2,7 +2,7 @@ package client
 
 func (c *RobotClient) DetectionObject(req ObjectDetectionBody) ([]DetectivedObject, error) {
 	result := make([]DetectivedObject, 0)
-	stat := c.sess.Call("", req, &result).Status()
+	stat := c.sess.Call("/detection/object", req, &result).Status()
 	if !stat.OK() {
 		return nil, stat.Cause()
 	}
