@@ -3,6 +3,7 @@ package global
 import (
 	"github.com/johnnyeven/libtools/config_agent"
 	"github.com/johnnyeven/libtools/servicex"
+	"github.com/johnnyeven/vehicle-robot-client/client"
 )
 
 func init() {
@@ -11,9 +12,9 @@ func init() {
 }
 
 var Config = struct {
-	ConfigAgent *config_agent.Agent
-
+	ConfigAgent        *config_agent.Agent
 	RobotConfiguration RobotConfiguration
+	RobotClient        *client.RobotClient
 }{
 	ConfigAgent: &config_agent.Agent{
 		Host:               "service-configurations.profzone.service.profzone.net",
@@ -22,4 +23,8 @@ var Config = struct {
 	},
 
 	RobotConfiguration: RobotConfiguration{},
+
+	RobotClient: &client.RobotClient{
+		RemoteAddr: "www.profzone.net:50999",
+	},
 }

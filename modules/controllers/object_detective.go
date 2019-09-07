@@ -3,7 +3,7 @@ package controllers
 import (
 	"bytes"
 	"fmt"
-	"github.com/johnnyeven/vehicle-robot-client/client_vehicle_robot"
+	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
 	"gobot.io/x/gobot/platforms/opencv"
 	"gocv.io/x/gocv"
@@ -13,7 +13,7 @@ import (
 	"image/jpeg"
 )
 
-func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli client_vehicle_robot.ClientVehicleRobotInterface) {
+func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli *client.RobotClient) {
 	err := camera.On(opencv.Frame, func(data interface{}) {
 		cameraImage := data.(gocv.Mat)
 
@@ -35,18 +35,16 @@ func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.Camer
 			return
 		}
 
-		request := client_vehicle_robot.ObjectDetectionRequest{
-			Body: client_vehicle_robot.ObjectDetectionBody{
-				Image: buf.Bytes(),
-			},
+		request := client.ObjectDetectionBody{
+			Image: buf.Bytes(),
 		}
-		resp, err := cli.ObjectDetection(request)
+		resp, err := cli.DetectionObject(request)
 		if err != nil {
 			fmt.Println("request err: ", err)
 			return
 		}
 
-		for _, detectived := range resp.Body {
+		for _, detectived := range resp {
 			x1 := float32(img.Bounds().Max.X) * detectived.Box[1]
 			x2 := float32(img.Bounds().Max.X) * detectived.Box[3]
 			y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
