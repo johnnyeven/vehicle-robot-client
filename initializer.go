@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/johnnyeven/libtools/bus"
+	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules/controllers"
 	"gobot.io/x/gobot"
@@ -10,7 +11,7 @@ import (
 	"gobot.io/x/gobot/platforms/opencv"
 )
 
-func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.MessageBus) *gobot.Robot {
+func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot {
 	devices := make([]gobot.Device, 0)
 	connections := make([]gobot.Connection, 0)
 	moduleWorkers := make([]func(), 0)
@@ -28,7 +29,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 			devices = append(devices, window, camera, servoHorizon, servoVertical)
 			moduleWorkers = append(moduleWorkers, func() {
 				go controllers.CameraHolderController(servoHorizon, servoVertical)
-				go controllers.ObjectDetectiveController(window, camera, global.Config.RobotClient)
+				go controllers.ObjectDetectiveController(window, camera, robotClient)
 			})
 		}
 

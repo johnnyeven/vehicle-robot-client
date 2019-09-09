@@ -11,6 +11,6 @@ func main() {
 	global.Config.ConfigAgent.BindConf(&global.Config.RobotConfiguration)
 	global.Config.ConfigAgent.Start()
 
-	robot := CreateRobotFromConfig(global.Config.RobotConfiguration, global.Config.MessageBus)
+	robot := CreateRobotFromConfig(global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
 	robot.Start()
 }
