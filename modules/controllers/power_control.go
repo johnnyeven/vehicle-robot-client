@@ -8,6 +8,8 @@ import (
 	"gobot.io/x/gobot/drivers/gpio"
 )
 
+const PowerControlTopic = "control.moving"
+
 type PowerController struct {
 	motorLeft  *gpio.MotorDriver
 	motorRight *gpio.MotorDriver
@@ -64,7 +66,7 @@ func (c *PowerController) TurnRight(speed uint8) error {
 }
 
 func (c *PowerController) Start() {
-	c.message.RegisterHandler("moving-control-handler", "control.moving", func(e *bus2.Event) {
+	c.message.RegisterHandler("moving-control-handler", PowerControlTopic, func(e *bus2.Event) {
 		var err error
 		if evt, ok := e.Data.(PowerControlEvent); ok {
 			switch evt.Direction {
