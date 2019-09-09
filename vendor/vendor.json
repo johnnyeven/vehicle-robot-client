@@ -332,6 +332,12 @@
 			"revisionTime": "2019-08-27T03:48:41Z"
 		},
 		{
+			"checksumSHA1": "WWMcGK1jK7TU13IYyLeMA7ysHuM=",
+			"path": "github.com/johnnyeven/libtools/bus",
+			"revision": "d0a2dde2be993b50701476f86b2bbe52c8c2b60f",
+			"revisionTime": "2019-09-09T05:41:56Z"
+		},
+		{
 			"checksumSHA1": "B5bFknJjXk2/90iRByRAxUNRrQg=",
 			"path": "github.com/johnnyeven/libtools/clients/client_configurations",
 			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
@@ -642,6 +648,36 @@
 			"path": "github.com/mitchellh/mapstructure",
 			"revision": "3536a929edddb9a5b34bd6861dc4a9647cb459fe",
 			"revisionTime": "2018-10-05T04:51:35Z"
+		},
+		{
+			"checksumSHA1": "MW07HDpxtg0zxirvbXqws4HTmTg=",
+			"path": "github.com/mustafaturan/bus",
+			"revision": "39f6078a5b6459162a69ddf9a68baeeb9b58a619",
+			"revisionTime": "2019-08-05T03:51:07Z"
+		},
+		{
+			"checksumSHA1": "qw0i09OiLI7rid+0aY9I/Wk2Ez4=",
+			"path": "github.com/mustafaturan/monoton",
+			"revision": "a59c469de003a420f855067a6e13abe1d9e58e77",
+			"revisionTime": "2019-04-17T07:15:47Z"
+		},
+		{
+			"checksumSHA1": "K1aYdWZSfQWqCBiqNrJLRSR/fd8=",
+			"path": "github.com/mustafaturan/monoton/encoder",
+			"revision": "a59c469de003a420f855067a6e13abe1d9e58e77",
+			"revisionTime": "2019-04-17T07:15:47Z"
+		},
+		{
+			"checksumSHA1": "1oqKd7LC3udKwQnAfSZ5D9RsyJM=",
+			"path": "github.com/mustafaturan/monoton/mtimer",
+			"revision": "a59c469de003a420f855067a6e13abe1d9e58e77",
+			"revisionTime": "2019-04-17T07:15:47Z"
+		},
+		{
+			"checksumSHA1": "I0XvfR8J/AtW0vf1T8jc9zkaouU=",
+			"path": "github.com/mustafaturan/monoton/sequencer",
+			"revision": "a59c469de003a420f855067a6e13abe1d9e58e77",
+			"revisionTime": "2019-04-17T07:15:47Z"
 		},
 		{
 			"checksumSHA1": "NzzMfGmmPoTGVwLZDkj3FXXDvCA=",

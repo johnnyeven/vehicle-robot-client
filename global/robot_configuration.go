@@ -10,7 +10,3 @@ type RobotConfiguration struct {
 	ServoHorizonPin  string           `json:"servoHorizonPin" default:"8"`
 	ServoVerticalPin string           `json:"servoVerticalPin" default:"9"`
 }
-
-func (c RobotConfiguration) Init() {
-
-}
