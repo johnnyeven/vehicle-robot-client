@@ -8,10 +8,15 @@ import (
 type RobotConfiguration struct {
 	// 总控开关（不启用无法启用任何其他模块，仅用于调试）
 	ActivateFirmata enumeration.Bool `json:"activateFirmata"`
+	// 启用API
+	ActivateApiSupport enumeration.Bool `json:"activateApiSupport"`
 	// 是否启用摄像头模块（不启用无法开启视频同步及物体识别）
 	ActivateCameraController enumeration.Bool `json:"activateCameraController"`
 	// 是否启用动力系统模块（不启用无法行走）
 	ActivatePowerController enumeration.Bool `json:"activatePowerController"`
+
+	// API服务端口号
+	APIServerPort string `json:"apiServerPort"`
 
 	// 摄像头模式（仅视频同步或者开启物体识别）
 	CameraMode types.CameraMode `json:"cameraMode"`

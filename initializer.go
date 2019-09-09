@@ -6,12 +6,13 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules/controllers"
 	"gobot.io/x/gobot"
+	"gobot.io/x/gobot/api"
 	"gobot.io/x/gobot/drivers/gpio"
 	"gobot.io/x/gobot/platforms/firmata"
 	"gobot.io/x/gobot/platforms/opencv"
 )
 
-func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot {
+func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
 	devices := make([]gobot.Device, 0)
 	connections := make([]gobot.Connection, 0)
 	moduleWorkers := make([]func(), 0)
@@ -47,6 +48,14 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 		}
 	}
 
+	master := gobot.NewMaster()
+
+	if config.ActivateApiSupport.True() {
+		apiServer := api.NewAPI(master)
+		apiServer.Port = config.APIServerPort
+		apiServer.Start()
+	}
+
 	robot := gobot.NewRobot("VehicleRobot",
 		connections,
 		devices,
@@ -57,5 +66,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 		},
 	)
 
-	return robot
+	master.AddRobot(robot)
+
+	return master
 }

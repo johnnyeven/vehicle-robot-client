@@ -10,6 +10,12 @@
 			"revisionTime": "2019-08-27T03:48:41Z"
 		},
 		{
+			"checksumSHA1": "KZbsm/85JwXaVdVFhE5m7bPArTo=",
+			"path": "github.com/bmizerany/pat",
+			"revision": "6226ea591a40176dd3ff9cd8eff81ed6ca721a00",
+			"revisionTime": "2017-08-15T01:04:13Z"
+		},
+		{
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
 			"origin": "github.com/henrylee2cn/teleport/vendor/github.com/cheekybits/genny/generic",
 			"path": "github.com/cheekybits/genny/generic",
@@ -784,6 +790,18 @@
 		{
 			"checksumSHA1": "qZaT15rNWYTID6gnTECt4DejDZY=",
 			"path": "gobot.io/x/gobot",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "YooYnty6ED68oEqRIOYlfMdnq44=",
+			"path": "gobot.io/x/gobot/api",
+			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
+			"revisionTime": "2019-05-23T12:37:01Z"
+		},
+		{
+			"checksumSHA1": "LIEZ6KQUufPkbTNIJcAEsqdSH4o=",
+			"path": "gobot.io/x/gobot/api/robeaux",
 			"revision": "da10293ac7f11b70d64fc3feba603c24c6378b76",
 			"revisionTime": "2019-05-23T12:37:01Z"
 		},
