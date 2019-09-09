@@ -17,8 +17,8 @@ func main() {
 
 	firmataAdaptor := firmata.NewAdaptor(global.Config.RobotConfiguration.ArduinoDeviceID)
 
-	servoHorizon := gpio.NewServoDriver(firmataAdaptor, global.Config.RobotConfiguration.ServoHorizonPin)
-	servoVertical := gpio.NewServoDriver(firmataAdaptor, global.Config.RobotConfiguration.ServoVerticalPin)
+	//servoHorizon := gpio.NewServoDriver(firmataAdaptor, global.Config.RobotConfiguration.ServoHorizonPin)
+	//servoVertical := gpio.NewServoDriver(firmataAdaptor, global.Config.RobotConfiguration.ServoVerticalPin)
 	//window := opencv.NewWindowDriver()
 	//camera := opencv.NewCameraDriver(0)
 
@@ -30,11 +30,11 @@ func main() {
 	powerController := controllers.NewPowerController(motorLeft, motorRight, global.Config.MessageBus)
 
 	robot := gobot.NewRobot("VehicleRobot",
-		[]gobot.Connection{firmataAdaptor},
-		[]gobot.Device{servoHorizon, servoVertical, motorLeft},
+		//[]gobot.Connection{firmataAdaptor},
+		//[]gobot.Device{servoHorizon, servoVertical, motorLeft},
 		//[]gobot.Device{window, camera, servoHorizon, servoVertical},
 		func() {
-			go controllers.CameraHolderController(servoHorizon, servoVertical)
+			//go controllers.CameraHolderController(servoHorizon, servoVertical)
 			//go controllers.ObjectDetectiveController(window, camera, global.Config.RobotClient)
 			powerController.Start()
 		},
