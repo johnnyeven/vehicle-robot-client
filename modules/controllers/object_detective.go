@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"fmt"
+	"github.com/gofrs/flock"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
 	"gobot.io/x/gobot/platforms/opencv"
@@ -11,15 +12,17 @@ import (
 	"image/color"
 	"image/draw"
 	"image/jpeg"
-	"sync"
 )
 
-var locker sync.Mutex
-
 func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli *client.RobotClient) {
+	locker := flock.New("/dev/lock/camera.lock")
 	err := camera.On(opencv.Frame, func(data interface{}) {
-		locker.Lock()
-		defer locker.Unlock()
+		locked, err := locker.TryLock()
+		if locked {
+			defer locker.Unlock()
+		} else {
+			return
+		}
 		cameraImage := data.(gocv.Mat)
 
 		sourceImg, err := cameraImage.ToImage()
