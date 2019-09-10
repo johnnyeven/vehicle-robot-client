@@ -6,6 +6,7 @@ package sequencer
 
 import (
 	"time"
+	"math"
 
 	"github.com/mustafaturan/monoton/mtimer"
 )
@@ -15,7 +16,7 @@ func NewSecond() *Sequence {
 	second := uint(time.Second)
 	return &Sequence{
 		now:     func() uint { return mtimer.Now() / second },
-		max:     62*62*62*62*62*62 - 1,
-		maxTime: 62*62*62*62*62*62 - 1,
+		max:     math.MaxUint32,
+		maxTime: math.MaxUint32,
 	}
 }
