@@ -14,7 +14,16 @@ import (
 )
 
 func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli *client.RobotClient) {
+	lockCamera := false
 	err := camera.On(opencv.Frame, func(data interface{}) {
+		if lockCamera == true {
+			return
+		} else {
+			lockCamera = true
+			defer func() {
+				lockCamera = false
+			}()
+		}
 		cameraImage := data.(gocv.Mat)
 
 		sourceImg, err := cameraImage.ToImage()
