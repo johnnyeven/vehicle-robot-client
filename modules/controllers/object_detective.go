@@ -11,10 +11,15 @@ import (
 	"image/color"
 	"image/draw"
 	"image/jpeg"
+	"sync"
 )
+
+var locker sync.Mutex
 
 func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli *client.RobotClient) {
 	err := camera.On(opencv.Frame, func(data interface{}) {
+		locker.Lock()
+		defer locker.Unlock()
 		cameraImage := data.(gocv.Mat)
 
 		sourceImg, err := cameraImage.ToImage()

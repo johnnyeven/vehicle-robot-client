@@ -24,13 +24,10 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 		if config.ActivateCameraController.True() {
 			servoHorizon := gpio.NewServoDriver(firmataAdaptor, config.ServoHorizonPin)
 			servoVertical := gpio.NewServoDriver(firmataAdaptor, config.ServoVerticalPin)
-			window := opencv.NewWindowDriver()
-			camera := opencv.NewCameraDriver(0)
 
-			devices = append(devices, window, camera, servoHorizon, servoVertical)
+			devices = append(devices, servoHorizon, servoVertical)
 			moduleWorkers = append(moduleWorkers, func() {
 				go controllers.CameraHolderController(servoHorizon, servoVertical)
-				go controllers.ObjectDetectiveController(window, camera, robotClient)
 			})
 		}
 
@@ -46,6 +43,16 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 				powerController.Start()
 			})
 		}
+	}
+
+	if config.ActivateCameraController.True() {
+		window := opencv.NewWindowDriver()
+		camera := opencv.NewCameraDriver(0)
+
+		devices = append(devices, window, camera)
+		moduleWorkers = append(moduleWorkers, func() {
+			go controllers.ObjectDetectiveController(window, camera, robotClient)
+		})
 	}
 
 	master := gobot.NewMaster()
