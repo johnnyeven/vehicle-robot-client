@@ -6,6 +6,7 @@ import (
 	"github.com/gofrs/flock"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
+	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot/platforms/opencv"
 	"gocv.io/x/gocv"
 	"image"
@@ -18,6 +19,9 @@ func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.Camer
 	locker := flock.New("/dev/lock/camera.lock")
 	err := camera.On(opencv.Frame, func(data interface{}) {
 		locked, err := locker.TryLock()
+		if err != nil {
+			logrus.Errorf("locking err: %v", err)
+		}
 		if locked {
 			defer locker.Unlock()
 		} else {
