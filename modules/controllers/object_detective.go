@@ -16,7 +16,7 @@ import (
 )
 
 func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli *client.RobotClient) {
-	locker := flock.New("/dev/lock/camera.lock")
+	locker := flock.New("./camera.lock")
 	err := camera.On(opencv.Frame, func(data interface{}) {
 		locked, err := locker.TryLock()
 		if err != nil {
