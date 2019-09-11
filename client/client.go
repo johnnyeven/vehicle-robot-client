@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/henrylee2cn/teleport"
 	"github.com/johnnyeven/libtools/conf"
+	"github.com/sirupsen/logrus"
 )
 
 type RobotClient struct {
@@ -19,6 +20,11 @@ func (c *RobotClient) Init() {
 	c.sess, stat = c.cli.Dial(c.RemoteAddr)
 	if !stat.OK() {
 		panic(fmt.Sprintf("connection err, status: %v", stat))
+	}
+
+	_, err := c.AuthorizationAuth([]byte{})
+	if err != nil {
+		logrus.Panicf("RobotClient.AuthorizationAuth err: %v", err)
 	}
 }
 
