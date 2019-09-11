@@ -5,3 +5,7 @@ type DetectivedObject struct {
 	Box         []float32
 	Probability float32
 }
+
+type CameraRequest struct {
+	Frame []byte
+}
