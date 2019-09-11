@@ -46,12 +46,11 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 	}
 
 	if config.ActivateCameraController.True() {
-		window := opencv.NewWindowDriver()
 		camera := opencv.NewCameraDriver(0)
 
-		devices = append(devices, window, camera)
+		devices = append(devices, camera)
 		moduleWorkers = append(moduleWorkers, func() {
-			go controllers.ObjectDetectiveController(window, camera, robotClient)
+			go controllers.ObjectDetectiveController(camera, robotClient)
 		})
 	}
 

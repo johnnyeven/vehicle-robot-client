@@ -13,7 +13,7 @@ import (
 	"image/jpeg"
 )
 
-func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.CameraDriver, cli *client.RobotClient) {
+func ObjectDetectiveController(camera *opencv.CameraDriver, cli *client.RobotClient) {
 	err := camera.On(opencv.Frame, func(data interface{}) {
 		cameraImage := data.(gocv.Mat)
 
@@ -53,14 +53,11 @@ func ObjectDetectiveController(window *opencv.WindowDriver, camera *opencv.Camer
 			modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
 		}
 
-		targetImage, err := modules.ConvertImageToMat(img)
-		if err != nil {
-			fmt.Println("modules.ConvertImageToMat err: ", err.Error())
-			return
-		}
-
-		window.ShowImage(targetImage)
-		window.WaitKey(1)
+		//targetImage, err := modules.ConvertImageToMat(img)
+		//if err != nil {
+		//	fmt.Println("modules.ConvertImageToMat err: ", err.Error())
+		//	return
+		//}
 	})
 	if err != nil {
 		fmt.Println("camera.On err: ", err.Error())
