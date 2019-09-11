@@ -50,7 +50,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 
 		devices = append(devices, camera)
 		moduleWorkers = append(moduleWorkers, func() {
-			go controllers.ObjectDetectiveController(camera, robotClient)
+			go controllers.ObjectDetectiveController(config, camera, robotClient)
 		})
 	}
 

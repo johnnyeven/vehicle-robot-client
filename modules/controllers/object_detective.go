@@ -3,7 +3,9 @@ package controllers
 import (
 	"bytes"
 	"fmt"
+	"github.com/johnnyeven/service-vehicle-robot/constants/types"
 	"github.com/johnnyeven/vehicle-robot-client/client"
+	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
 	"gobot.io/x/gobot/platforms/opencv"
 	"gocv.io/x/gocv"
@@ -13,7 +15,7 @@ import (
 	"image/jpeg"
 )
 
-func ObjectDetectiveController(camera *opencv.CameraDriver, cli *client.RobotClient) {
+func ObjectDetectiveController(config global.RobotConfiguration, camera *opencv.CameraDriver, cli *client.RobotClient) {
 	err := camera.On(opencv.Frame, func(data interface{}) {
 		cameraImage := data.(gocv.Mat)
 
@@ -24,7 +26,6 @@ func ObjectDetectiveController(camera *opencv.CameraDriver, cli *client.RobotCli
 		}
 
 		b := sourceImg.Bounds()
-		fmt.Println(b.Dx(), b.Dy())
 		img := image.NewRGBA(b)
 		draw.Draw(img, b, sourceImg, b.Min, draw.Src)
 
@@ -35,29 +36,34 @@ func ObjectDetectiveController(camera *opencv.CameraDriver, cli *client.RobotCli
 			return
 		}
 
-		request := client.ObjectDetectionBody{
-			Image: buf.Bytes(),
-		}
-		resp, err := cli.DetectionObject(request)
-		if err != nil {
-			fmt.Println("request err: ", err)
-			return
-		}
+		if config.CameraMode == types.CAMERA_MODE__OBJECT_DETECTIVE {
+			resp, err := cli.DetectionObject(buf.Bytes())
+			if err != nil {
+				fmt.Println("cli.DetectionObject request err: ", err)
+				return
+			}
 
-		for _, detectived := range resp {
-			x1 := float32(img.Bounds().Max.X) * detectived.Box[1]
-			x2 := float32(img.Bounds().Max.X) * detectived.Box[3]
-			y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
-			y2 := float32(img.Bounds().Max.Y) * detectived.Box[2]
+			for _, detectived := range resp {
+				x1 := float32(img.Bounds().Max.X) * detectived.Box[1]
+				x2 := float32(img.Bounds().Max.X) * detectived.Box[3]
+				y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
+				y2 := float32(img.Bounds().Max.Y) * detectived.Box[2]
 
-			modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
+				modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
+			}
+
+			//targetImage, err := modules.ConvertImageToMat(img)
+			//if err != nil {
+			//	fmt.Println("modules.ConvertImageToMat err: ", err.Error())
+			//	return
+			//}
+		} else if config.CameraMode == types.CAMERA_MODE__NORMAL {
+			err = cli.CameraTransfer(buf.Bytes())
+			if err != nil {
+				fmt.Println("cli.CameraTransfer push err: ", err)
+				return
+			}
 		}
-
-		//targetImage, err := modules.ConvertImageToMat(img)
-		//if err != nil {
-		//	fmt.Println("modules.ConvertImageToMat err: ", err.Error())
-		//	return
-		//}
 	})
 	if err != nil {
 		fmt.Println("camera.On err: ", err.Error())
