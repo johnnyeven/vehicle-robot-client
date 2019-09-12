@@ -6,11 +6,15 @@ type DetectivedObject struct {
 	Probability float32
 }
 
-type AuthRequest struct {
+type AuthRequestHeader struct {
 	Token string
 }
 
 type CameraRequest struct {
-	AuthRequest
+	AuthRequestHeader
 	Frame []byte
+}
+
+type AuthRequest struct {
+	Key string
 }

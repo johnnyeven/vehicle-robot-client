@@ -11,9 +11,13 @@ type RobotClient struct {
 	cli        tp.Peer
 	sess       tp.Session
 	RemoteAddr string `conf:"env"`
+	NodeKey    string `conf:"env"`
 }
 
 func (c *RobotClient) Init() {
+	if c.NodeKey == "" {
+		logrus.Panicf("RobotClient NodeKey must not be empty")
+	}
 	var stat *tp.Status
 	c.cli = tp.NewPeer(tp.PeerConfig{})
 
@@ -22,10 +26,11 @@ func (c *RobotClient) Init() {
 		panic(fmt.Sprintf("connection err, status: %v", stat))
 	}
 
-	_, err := c.AuthorizationAuth([]byte{})
+	token, err := c.AuthorizationAuth(c.NodeKey)
 	if err != nil {
 		logrus.Panicf("RobotClient.AuthorizationAuth err: %v", err)
 	}
+	fmt.Println(string(token))
 }
 
 func (c RobotClient) MarshalDefaults(v interface{}) {

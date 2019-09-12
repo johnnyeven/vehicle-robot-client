@@ -1,9 +1,12 @@
 package client
 
-func (c *RobotClient) AuthorizationAuth(key []byte) (token []byte, err error) {
-	stat := c.sess.Call("/authorization/auth", key, &token).Status()
+func (c *RobotClient) AuthorizationAuth(key string) (token []byte, err error) {
+	request := AuthRequest{
+		Key: key,
+	}
+	stat := c.sess.Call("/authorization/auth", request, &token).Status()
 	if !stat.OK() {
-		return nil, stat.Cause()
+		err = stat.Cause()
 	}
 	return
 }
