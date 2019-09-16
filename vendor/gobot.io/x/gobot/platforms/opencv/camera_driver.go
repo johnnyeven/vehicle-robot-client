@@ -9,6 +9,8 @@ import (
 
 type capture interface {
 	Read(img *gocv.Mat) bool
+	Set(prop gocv.VideoCaptureProperties, param float64)
+	Get(prop gocv.VideoCaptureProperties) float64
 }
 
 const (
@@ -77,3 +79,11 @@ func (c *CameraDriver) Start() (err error) {
 
 // Halt stops camera driver
 func (c *CameraDriver) Halt() (err error) { return }
+
+func (c *CameraDriver) Set(prop gocv.VideoCaptureProperties, param float64) {
+	c.camera.Set(prop, param)
+}
+
+func (c *CameraDriver) Get(prop gocv.VideoCaptureProperties) float64 {
+	return c.camera.Get(prop)
+}

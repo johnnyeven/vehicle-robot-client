@@ -7,7 +7,6 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
-	"gobot.io/x/gobot/platforms/opencv"
 	"gocv.io/x/gocv"
 	"image"
 	"image/color"
@@ -15,9 +14,12 @@ import (
 	"image/jpeg"
 )
 
-func ObjectDetectiveController(config global.RobotConfiguration, camera *opencv.CameraDriver, cli *client.RobotClient) {
-	err := camera.On(opencv.Frame, func(data interface{}) {
-		cameraImage := data.(gocv.Mat)
+func ObjectDetectiveController(config global.RobotConfiguration, camera *gocv.VideoCapture, cli *client.RobotClient) {
+	for {
+		cameraImage := gocv.NewMat()
+		if !camera.Read(&cameraImage) {
+			break
+		}
 
 		sourceImg, err := cameraImage.ToImage()
 		if err != nil {
@@ -64,8 +66,5 @@ func ObjectDetectiveController(config global.RobotConfiguration, camera *opencv.
 				return
 			}
 		}
-	})
-	if err != nil {
-		fmt.Println("camera.On err: ", err.Error())
 	}
 }

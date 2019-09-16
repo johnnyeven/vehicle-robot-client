@@ -5,11 +5,12 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules/controllers"
+	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/api"
 	"gobot.io/x/gobot/drivers/gpio"
 	"gobot.io/x/gobot/platforms/firmata"
-	"gobot.io/x/gobot/platforms/opencv"
+	"gocv.io/x/gocv"
 )
 
 func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
@@ -46,9 +47,14 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 	}
 
 	if config.ActivateCameraController.True() {
-		camera := opencv.NewCameraDriver(0)
+		camera, err := gocv.VideoCaptureDevice(0)
+		if err != nil {
+			logrus.Panicf("gocv.VideoCaptureDevice err: %v", err)
+		}
+		camera.Set(gocv.VideoCaptureFrameWidth, 320)
+		camera.Set(gocv.VideoCaptureFrameHeight, 240)
+		camera.Set(gocv.VideoCaptureFPS, 1)
 
-		devices = append(devices, camera)
 		moduleWorkers = append(moduleWorkers, func() {
 			go controllers.ObjectDetectiveController(config, camera, robotClient)
 		})
