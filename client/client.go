@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"github.com/henrylee2cn/teleport"
+	"github.com/henrylee2cn/teleport/proto/pbproto"
 	"github.com/johnnyeven/libtools/conf"
 	"github.com/sirupsen/logrus"
 )
@@ -19,6 +20,7 @@ func (c *RobotClient) Init() {
 		logrus.Panicf("RobotClient NodeKey must not be empty")
 	}
 	var stat *tp.Status
+	tp.SetDefaultProtoFunc(pbproto.NewPbProtoFunc())
 	c.cli = tp.NewPeer(tp.PeerConfig{})
 
 	c.sess, stat = c.cli.Dial(c.RemoteAddr)
