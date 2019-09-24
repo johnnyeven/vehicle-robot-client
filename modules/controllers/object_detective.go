@@ -15,6 +15,7 @@ import (
 )
 
 func ObjectDetectiveController(config global.RobotConfiguration, camera *gocv.VideoCapture, cli *client.RobotClient) {
+	defer camera.Close()
 	for {
 		cameraImage := gocv.NewMat()
 		if !camera.Read(&cameraImage) {
