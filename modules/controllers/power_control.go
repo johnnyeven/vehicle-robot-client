@@ -65,6 +65,15 @@ func (c *PowerController) TurnRight(speed uint8) error {
 	return err
 }
 
+func (c *PowerController) Stop() error {
+	err := c.motorRight.Off()
+	if err != nil {
+		return err
+	}
+	err = c.motorLeft.Off()
+	return err
+}
+
 func (c *PowerController) Start() {
 	c.message.RegisterHandler("moving-control-handler", PowerControlTopic, func(e *bus2.Event) {
 		var err error
@@ -78,6 +87,8 @@ func (c *PowerController) Start() {
 				err = c.TurnLeft(evt.Speed)
 			case constants.MOVING_DIRECTION__TURN_RIGHT:
 				err = c.TurnRight(evt.Speed)
+			case constants.MOVING_DIRECTION__STOP:
+				err = c.Stop()
 			}
 
 			if err != nil {

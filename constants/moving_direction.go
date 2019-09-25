@@ -11,4 +11,5 @@ const (
 	MOVING_DIRECTION__BACKWARD                   // 后退
 	MOVING_DIRECTION__TURN_LEFT                  // 左转
 	MOVING_DIRECTION__TURN_RIGHT                 // 右转
+	MOVING_DIRECTION__STOP                       // 停止
 )

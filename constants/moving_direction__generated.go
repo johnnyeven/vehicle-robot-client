@@ -14,6 +14,7 @@ func init() {
 	github_com_johnnyeven_libtools_courier_enumeration.RegisterEnums("MovingDirection", map[string]string{
 		"BACKWARD":   "后退",
 		"FORWARD":    "前进",
+		"STOP":       "停止",
 		"TURN_LEFT":  "左转",
 		"TURN_RIGHT": "右转",
 	})
@@ -27,6 +28,8 @@ func ParseMovingDirectionFromString(s string) (MovingDirection, error) {
 		return MOVING_DIRECTION__BACKWARD, nil
 	case "FORWARD":
 		return MOVING_DIRECTION__FORWARD, nil
+	case "STOP":
+		return MOVING_DIRECTION__STOP, nil
 	case "TURN_LEFT":
 		return MOVING_DIRECTION__TURN_LEFT, nil
 	case "TURN_RIGHT":
@@ -43,6 +46,8 @@ func ParseMovingDirectionFromLabelString(s string) (MovingDirection, error) {
 		return MOVING_DIRECTION__BACKWARD, nil
 	case "前进":
 		return MOVING_DIRECTION__FORWARD, nil
+	case "停止":
+		return MOVING_DIRECTION__STOP, nil
 	case "左转":
 		return MOVING_DIRECTION__TURN_LEFT, nil
 	case "右转":
@@ -59,6 +64,7 @@ func (MovingDirection) Enums() map[int][]string {
 	return map[int][]string{
 		int(MOVING_DIRECTION__BACKWARD):   {"BACKWARD", "后退"},
 		int(MOVING_DIRECTION__FORWARD):    {"FORWARD", "前进"},
+		int(MOVING_DIRECTION__STOP):       {"STOP", "停止"},
 		int(MOVING_DIRECTION__TURN_LEFT):  {"TURN_LEFT", "左转"},
 		int(MOVING_DIRECTION__TURN_RIGHT): {"TURN_RIGHT", "右转"},
 	}
@@ -71,6 +77,8 @@ func (v MovingDirection) String() string {
 		return "BACKWARD"
 	case MOVING_DIRECTION__FORWARD:
 		return "FORWARD"
+	case MOVING_DIRECTION__STOP:
+		return "STOP"
 	case MOVING_DIRECTION__TURN_LEFT:
 		return "TURN_LEFT"
 	case MOVING_DIRECTION__TURN_RIGHT:
@@ -87,6 +95,8 @@ func (v MovingDirection) Label() string {
 		return "后退"
 	case MOVING_DIRECTION__FORWARD:
 		return "前进"
+	case MOVING_DIRECTION__STOP:
+		return "停止"
 	case MOVING_DIRECTION__TURN_LEFT:
 		return "左转"
 	case MOVING_DIRECTION__TURN_RIGHT:
