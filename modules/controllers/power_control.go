@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/johnnyeven/libtools/bus"
+	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/constants"
 	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
@@ -9,16 +10,12 @@ import (
 )
 
 const PowerControlTopic = "control.moving"
+const MaxPower float64 = 255
 
 type PowerController struct {
 	motorLeft  *gpio.MotorDriver
 	motorRight *gpio.MotorDriver
 	message    *bus.MessageBus
-}
-
-type PowerControlEvent struct {
-	Direction constants.MovingDirection
-	Speed     uint8
 }
 
 func NewPowerController(motorLeft *gpio.MotorDriver, motorRight *gpio.MotorDriver, messageBus *bus.MessageBus) *PowerController {
@@ -77,16 +74,16 @@ func (c *PowerController) Stop() error {
 func (c *PowerController) Start() {
 	c.message.RegisterHandler("moving-control-handler", PowerControlTopic, func(e *bus2.Event) {
 		var err error
-		if evt, ok := e.Data.(PowerControlEvent); ok {
+		if evt, ok := e.Data.(*client.PowerMovingRequest); ok {
 			switch evt.Direction {
 			case constants.MOVING_DIRECTION__FORWARD:
-				err = c.Forward(evt.Speed)
+				err = c.Forward(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__BACKWARD:
-				err = c.Backward(evt.Speed)
+				err = c.Backward(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__TURN_LEFT:
-				err = c.TurnLeft(evt.Speed)
+				err = c.TurnLeft(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__TURN_RIGHT:
-				err = c.TurnRight(evt.Speed)
+				err = c.TurnRight(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__STOP:
 				err = c.Stop()
 			}

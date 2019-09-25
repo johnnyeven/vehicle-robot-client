@@ -48,3 +48,11 @@ func (c *RobotClient) DockerDefaults() conf.DockerDefaults {
 		"RemoteAddr": "127.0.0.1:9090",
 	}
 }
+
+func (c *RobotClient) RegisterCallRouter(route interface{}, plugins ...tp.Plugin) []string {
+	return c.cli.RouteCall(route, plugins...)
+}
+
+func (c *RobotClient) RegisterPushRouter(route interface{}, plugins ...tp.Plugin) []string {
+	return c.cli.RoutePush(route, plugins...)
+}
