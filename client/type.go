@@ -13,7 +13,6 @@ type AuthRequestHeader struct {
 }
 
 type CameraRequest struct {
-	AuthRequestHeader
 	Frame []byte
 }
 

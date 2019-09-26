@@ -27,7 +27,7 @@ var Config = struct {
 	RobotConfiguration: RobotConfiguration{},
 
 	RobotClient: &client.RobotClient{
-		RemoteAddr: "localhost:9090",
+		RemoteAddr: "robot.profzone.net:50999",
 		NodeKey:    "123",
 	},
 
