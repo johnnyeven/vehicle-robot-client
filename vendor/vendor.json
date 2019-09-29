@@ -928,6 +928,30 @@
 			"revisionTime": "2019-08-28T23:00:48Z"
 		},
 		{
+			"checksumSHA1": "tLJPdQuPL0hB6UBUahxl44V/qbQ=",
+			"path": "golang.org/x/image/colornames",
+			"revision": "69e4b8554b2a817a1f0015867f0858d02801f0f5",
+			"revisionTime": "2019-09-09T22:43:31Z"
+		},
+		{
+			"checksumSHA1": "CQYQ8wELyxPMRYOTDLELVtude/M=",
+			"path": "golang.org/x/image/font",
+			"revision": "69e4b8554b2a817a1f0015867f0858d02801f0f5",
+			"revisionTime": "2019-09-09T22:43:31Z"
+		},
+		{
+			"checksumSHA1": "iV2FonJPeLV+iF4JHS3TRRXegF4=",
+			"path": "golang.org/x/image/font/basicfont",
+			"revision": "69e4b8554b2a817a1f0015867f0858d02801f0f5",
+			"revisionTime": "2019-09-09T22:43:31Z"
+		},
+		{
+			"checksumSHA1": "euzvwlMLxyD0hwc+raoVsDLv6j4=",
+			"path": "golang.org/x/image/math/fixed",
+			"revision": "69e4b8554b2a817a1f0015867f0858d02801f0f5",
+			"revisionTime": "2019-09-09T22:43:31Z"
+		},
+		{
 			"checksumSHA1": "pCY4YtdNKVBYRbNvODjx8hj0hIs=",
 			"path": "golang.org/x/net/http/httpguts",
 			"revision": "ba9fcec4b297b415637633c5a6e8fa592e4a16c3",
