@@ -9,7 +9,6 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/modules"
 	"gocv.io/x/gocv"
 	"image"
-	"image/color"
 	"image/draw"
 	"image/jpeg"
 )
@@ -51,7 +50,8 @@ func ObjectDetectiveController(config global.RobotConfiguration, camera *gocv.Vi
 				y1 := float32(img.Bounds().Max.Y) * detectived.Box[0]
 				y2 := float32(img.Bounds().Max.Y) * detectived.Box[2]
 
-				modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
+				modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, modules.GetLabelColor(int(detectived.Class)))
+				modules.DrawLabel(img, int(x1), int(y1), int(detectived.Class), detectived.Label)
 			}
 		}
 

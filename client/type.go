@@ -3,21 +3,22 @@ package client
 import "github.com/johnnyeven/vehicle-robot-client/constants"
 
 type DetectivedObject struct {
-	Class       float32
-	Box         []float32
-	Probability float32
+	Class       float32   `json:"class"`
+	Label       string    `json:"label"`
+	Box         []float32 `json:"box"`
+	Probability float32   `json:"probability"`
 }
 
 type AuthRequestHeader struct {
-	Token string
+	Token string `json:"token"`
 }
 
 type CameraRequest struct {
-	Frame []byte
+	Frame []byte `json:"frame"`
 }
 
 type AuthRequest struct {
-	Key string
+	Key string `json:"key"`
 }
 
 type PowerMovingRequest struct {

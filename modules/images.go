@@ -2,6 +2,10 @@ package modules
 
 import (
 	"gocv.io/x/gocv"
+	"golang.org/x/image/colornames"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
+	"golang.org/x/image/math/fixed"
 	"image"
 	"image/color"
 )
@@ -47,4 +51,27 @@ func ConvertImageToMat(image image.Image) (mat gocv.Mat, err error) {
 
 	mat, err = gocv.NewMatFromBytes(y, x, gocv.MatTypeCV8UC3, bytes)
 	return
+}
+
+func DrawLabel(img *image.RGBA, x, y, class int, label string) {
+	col := GetLabelColor(class)
+	point := fixed.Point26_6{
+		X: fixed.Int26_6(x * 64),
+		Y: fixed.Int26_6(y * 64),
+	}
+
+	d := &font.Drawer{
+		Dst:  img,
+		Src:  image.NewUniform(colornames.Black),
+		Face: basicfont.Face7x13,
+		Dot:  point,
+	}
+
+	Rect(img, x, y-13, x+len(label)*7, y-6, 7, col)
+
+	d.DrawString(label)
+}
+
+func GetLabelColor(classIndex int) color.RGBA {
+	return colornames.Map[colornames.Names[classIndex]]
 }
