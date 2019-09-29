@@ -32,14 +32,13 @@ func ObjectDetectiveController(config global.RobotConfiguration, camera *gocv.Vi
 		img := image.NewRGBA(b)
 		draw.Draw(img, b, sourceImg, b.Min, draw.Src)
 
-		buf := bytes.NewBuffer([]byte{})
-		err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 75})
-		if err != nil {
-			fmt.Println("jpeg.Encode err: ", err.Error())
-			return
-		}
-
 		if config.CameraMode == types.CAMERA_MODE__OBJECT_DETECTIVE {
+			buf := bytes.NewBuffer([]byte{})
+			err = jpeg.Encode(buf, img, &jpeg.Options{Quality: 75})
+			if err != nil {
+				fmt.Println("jpeg.Encode err: ", err.Error())
+				return
+			}
 			resp, err := cli.DetectionObject(buf.Bytes())
 			if err != nil {
 				fmt.Println("cli.DetectionObject request err: ", err)
@@ -54,18 +53,19 @@ func ObjectDetectiveController(config global.RobotConfiguration, camera *gocv.Vi
 
 				modules.Rect(img, int(x1), int(y1), int(x2), int(y2), 4, color.White)
 			}
+		}
 
-			//targetImage, err := modules.ConvertImageToMat(img)
-			//if err != nil {
-			//	fmt.Println("modules.ConvertImageToMat err: ", err.Error())
-			//	return
-			//}
-		} else if config.CameraMode == types.CAMERA_MODE__NORMAL {
-			err = cli.CameraTransfer(buf.Bytes())
-			if err != nil {
-				fmt.Println("cli.CameraTransfer push err: ", err)
-				return
-			}
+		buf := bytes.NewBuffer([]byte{})
+		err = jpeg.Encode(buf, img, &jpeg.Options{Quality: 75})
+		if err != nil {
+			fmt.Println("jpeg.Encode err: ", err.Error())
+			return
+		}
+
+		err = cli.CameraTransfer(buf.Bytes())
+		if err != nil {
+			fmt.Println("cli.CameraTransfer push err: ", err)
+			return
 		}
 	}
 }
