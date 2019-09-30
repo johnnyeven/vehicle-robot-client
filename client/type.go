@@ -9,10 +9,6 @@ type DetectivedObject struct {
 	Probability float32   `json:"probability"`
 }
 
-type AuthRequestHeader struct {
-	Token string `json:"token"`
-}
-
 type CameraRequest struct {
 	Frame []byte `json:"frame"`
 }
@@ -24,4 +20,9 @@ type AuthRequest struct {
 type PowerMovingRequest struct {
 	Direction constants.MovingDirection `json:"direction"`
 	Speed     float64                   `json:"speed"`
+}
+
+type CameraHolderRequest struct {
+	Direction constants.HolderDirection `json:"direction"`
+	Angle     uint8                     `json:"angle"`
 }

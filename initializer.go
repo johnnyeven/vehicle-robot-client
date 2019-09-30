@@ -28,7 +28,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 
 			devices = append(devices, servoHorizon, servoVertical)
 			moduleWorkers = append(moduleWorkers, func() {
-				go controllers.CameraHolderController(servoHorizon, servoVertical)
+				go controllers.CameraHolderController(servoHorizon, servoVertical, messageBus)
 			})
 		}
 

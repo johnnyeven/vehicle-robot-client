@@ -9,7 +9,7 @@ import (
 	"gobot.io/x/gobot/drivers/gpio"
 )
 
-const PowerControlTopic = "control.moving"
+const PowerControlTopic = "power.moving"
 const MaxPower float64 = 255
 
 type PowerController struct {
@@ -72,7 +72,7 @@ func (c *PowerController) Stop() error {
 }
 
 func (c *PowerController) Start() {
-	c.message.RegisterHandler("moving-control-handler", PowerControlTopic, func(e *bus2.Event) {
+	c.message.RegisterHandler("camera-moving-handler", PowerControlTopic, func(e *bus2.Event) {
 		var err error
 		if evt, ok := e.Data.(*client.PowerMovingRequest); ok {
 			switch evt.Direction {
@@ -89,10 +89,10 @@ func (c *PowerController) Start() {
 			}
 
 			if err != nil {
-				logrus.Errorf("[PowerController] moving-control-handler moving err: %v, event: %+v", err, evt)
+				logrus.Errorf("[PowerController] camera-moving-handler moving err: %v, event: %+v", err, evt)
 			}
 		} else {
-			logrus.Errorf("[PowerController] moving-control-handler Data type err: %s", "not PowerControlEvent struct")
+			logrus.Errorf("[PowerController] camera-moving-handler Data type err: %s", "not PowerMovingRequest struct")
 		}
 	})
 }

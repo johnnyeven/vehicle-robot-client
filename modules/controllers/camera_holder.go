@@ -1,27 +1,32 @@
 package controllers
 
 import (
-	"fmt"
+	"github.com/johnnyeven/libtools/bus"
+	"github.com/johnnyeven/vehicle-robot-client/client"
+	"github.com/johnnyeven/vehicle-robot-client/constants"
+	bus2 "github.com/mustafaturan/bus"
+	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot/drivers/gpio"
 )
 
-func CameraHolderController(servoHorizon *gpio.ServoDriver, servoVertical *gpio.ServoDriver) {
-	var horizonAngleNumber, verticalAngleNumber uint8
-	for {
-		fmt.Println("input horizonAngle and verticalAngle")
-		_, err := fmt.Scanln(&horizonAngleNumber, &verticalAngleNumber)
-		if err != nil {
-			fmt.Println("[CameraHolderController] fmt.Scanln err: ", err)
-			continue
+const CameraHolderTopic = "camera.holder"
+const MaxAngle float64 = 180
+
+func CameraHolderController(servoHorizon *gpio.ServoDriver, servoVertical *gpio.ServoDriver, messageBus *bus.MessageBus) {
+	messageBus.RegisterHandler("camera-holder-handler", CameraHolderTopic, func(e *bus2.Event) {
+		var err error
+		if evt, ok := e.Data.(*client.CameraHolderRequest); ok {
+			if evt.Direction == constants.HOLDER_DIRECTION__HORIZEN {
+				err = servoHorizon.Move(evt.Angle)
+			} else {
+				err = servoVertical.Move(evt.Angle)
+			}
+
+			if err != nil {
+				logrus.Errorf("[HolderController] camera-holder-handler moving err: %v, event: %+v", err, evt)
+			}
+		} else {
+			logrus.Errorf("[HolderController] camera-holder-handler Data type err: %s", "not CameraHolderRequest struct")
 		}
-		err = servoHorizon.Move(horizonAngleNumber)
-		if err != nil {
-			fmt.Printf("[CameraHolderController] servoHorizon.Move err: %v, angle: %d\n", err, horizonAngleNumber)
-			continue
-		}
-		err = servoVertical.Move(verticalAngleNumber)
-		if err != nil {
-			fmt.Printf("[CameraHolderController] servoVertical.Move err: %v, angle: %d\n", err, verticalAngleNumber)
-		}
-	}
+	})
 }
