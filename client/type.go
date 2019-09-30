@@ -24,5 +24,5 @@ type PowerMovingRequest struct {
 
 type CameraHolderRequest struct {
 	Direction constants.HolderDirection `json:"direction"`
-	Angle     uint8                     `json:"angle"`
+	Offset    float64                   `json:"offset"`
 }
