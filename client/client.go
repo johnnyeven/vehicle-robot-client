@@ -15,7 +15,7 @@ type RobotClient struct {
 	NodeKey    string `conf:"env"`
 }
 
-func (c *RobotClient) Init() {
+func (c *RobotClient) Start() {
 	if c.NodeKey == "" {
 		logrus.Panicf("RobotClient NodeKey must not be empty")
 	}

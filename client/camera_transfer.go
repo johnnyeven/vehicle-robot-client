@@ -1,6 +1,10 @@
 package client
 
 func (c *RobotClient) CameraTransfer(frame []byte) error {
+	if c.sess == nil {
+		return nil
+	}
+
 	request := CameraRequest{
 		Frame: frame,
 	}

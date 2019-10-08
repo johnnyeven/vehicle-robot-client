@@ -27,13 +27,14 @@ var Config = struct {
 	RobotConfiguration: RobotConfiguration{},
 
 	RobotClient: &client.RobotClient{
-		RemoteAddr: "robot.profzone.net:9090",
-		NodeKey:    "123",
+		NodeKey: "123",
 	},
 
 	MessageBus: &bus.MessageBus{
 		RegisterTopics: []string{
-			"control.moving",
+			"camera.holder",
+			"power.moving",
+			"remote.address",
 		},
 	},
 }
