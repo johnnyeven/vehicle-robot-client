@@ -36,6 +36,7 @@ func (c *BroadcastController) Start() {
 		count, addr, err := c.conn.ReadFromUDP(buffer)
 		if err != nil {
 			logrus.Warningf("[BroadcastController] conn.ReadFromUDP err: %v", err)
+			continue
 		}
 
 		logrus.Infof("received udp: length=%d, address=%s", count, addr.String())
@@ -43,6 +44,7 @@ func (c *BroadcastController) Start() {
 		if err != nil {
 			logrus.Warningf("[BroadcastController] MessageBus.Emit err: %v", err)
 		}
+		break
 	}
 }
 

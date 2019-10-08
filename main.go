@@ -18,7 +18,10 @@ func main() {
 	global.Config.MessageBus.RegisterHandler("remote-address-handler", modules.RemoteAddressTopic, handleAddressEvent)
 
 	broadcast := modules.NewBroadcastController()
-	broadcast.Start()
+	defer broadcast.Close()
+	go broadcast.Start()
+
+	select {}
 }
 
 func handleAddressEvent(e *bus.Event) {
