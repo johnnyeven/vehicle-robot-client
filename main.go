@@ -25,10 +25,10 @@ func main() {
 }
 
 func handleAddressEvent(e *bus.Event) {
-	if ip, ok := e.Data.(net.IP); ok {
+	if addr, ok := e.Data.(net.UDPAddr); ok {
 		addr := net.TCPAddr{
-			IP:   ip,
-			Port: 9090,
+			IP:   addr.IP,
+			Port: addr.Port,
 		}
 		global.Config.RobotClient.RemoteAddr = addr.String()
 		global.Config.RobotClient.Start()

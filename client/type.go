@@ -2,6 +2,10 @@ package client
 
 import "github.com/johnnyeven/vehicle-robot-client/constants"
 
+type BroadcastRequest struct {
+	Port uint16 `json:"port"`
+}
+
 type DetectivedObject struct {
 	Class       float32   `json:"class"`
 	Label       string    `json:"label"`

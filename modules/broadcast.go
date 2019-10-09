@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"encoding/json"
+	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/sirupsen/logrus"
 	"net"
@@ -39,8 +41,16 @@ func (c *BroadcastController) Start() {
 			continue
 		}
 
+		broadcast := client.BroadcastRequest{}
+		err = json.Unmarshal(buffer, &broadcast)
+		if err != nil {
+			logrus.Warningf("[BroadcastController] json.Unmarshal err: %v", err)
+			continue
+		}
+
+		addr.Port = int(broadcast.Port)
 		logrus.Infof("received udp: length=%d, address=%s", count, addr.String())
-		_, err = global.Config.MessageBus.Emit(RemoteAddressTopic, addr.IP, "")
+		_, err = global.Config.MessageBus.Emit(RemoteAddressTopic, addr, "")
 		if err != nil {
 			logrus.Warningf("[BroadcastController] MessageBus.Emit err: %v", err)
 		}
