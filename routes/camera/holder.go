@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Camera) Holder(req *client.CameraHolderRequest) *tp.Status {
-	_, err := c.messageBus.Emit(controllers.PowerControlTopic, req, "")
+	_, err := c.messageBus.Emit(controllers.CameraHolderTopic, req, "")
 	if err != nil {
 		return tp.NewStatus(99, "", err)
 	}
