@@ -7,6 +7,9 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/routes"
 	"github.com/mustafaturan/bus"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -21,7 +24,7 @@ func main() {
 	defer broadcast.Close()
 	go broadcast.Start()
 
-	select {}
+	gracefulClose()
 }
 
 func handleAddressEvent(e *bus.Event) {
@@ -36,5 +39,16 @@ func handleAddressEvent(e *bus.Event) {
 
 		robots := CreateRobotFromConfig(global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
 		robots.Start()
+	}
+}
+
+func gracefulClose() {
+	ch := make(chan os.Signal)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM, syscall.SIGUSR2)
+
+	select {
+	case <-ch:
+		signal.Stop(ch)
+		break
 	}
 }
