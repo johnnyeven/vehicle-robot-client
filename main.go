@@ -25,7 +25,7 @@ func main() {
 }
 
 func handleAddressEvent(e *bus.Event) {
-	if addr, ok := e.Data.(net.UDPAddr); ok {
+	if addr, ok := e.Data.(*net.UDPAddr); ok {
 		addr := net.TCPAddr{
 			IP:   addr.IP,
 			Port: addr.Port,

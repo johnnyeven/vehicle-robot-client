@@ -19,7 +19,8 @@ var Config = struct {
 	MessageBus         *bus.MessageBus
 }{
 	ConfigAgent: &config_agent.Agent{
-		Host:               "service-configurations.profzone.service.profzone.net",
+		Host:               "localhost",
+		Port:               8002,
 		PullConfigInterval: 60,
 		StackID:            123,
 	},

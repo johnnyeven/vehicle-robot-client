@@ -42,7 +42,7 @@ func (c *BroadcastController) Start() {
 		}
 
 		broadcast := client.BroadcastRequest{}
-		err = json.Unmarshal(buffer, &broadcast)
+		err = json.Unmarshal(buffer[:count], &broadcast)
 		if err != nil {
 			logrus.Warningf("[BroadcastController] json.Unmarshal err: %v", err)
 			continue
