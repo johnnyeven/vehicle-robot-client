@@ -27,6 +27,6 @@ type PowerMovingRequest struct {
 }
 
 type CameraHolderRequest struct {
-	Direction constants.HolderDirection `json:"direction"`
-	Offset    float64                   `json:"offset"`
+	HorizonOffset  float64 `json:"horizonOffset"`
+	VerticalOffset float64 `json:"verticalOffset"`
 }
