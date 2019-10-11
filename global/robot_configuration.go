@@ -12,6 +12,8 @@ type RobotConfiguration struct {
 	ActivateApiSupport enumeration.Bool `json:"activateApiSupport"`
 	// 是否启用摄像头模块（不启用无法开启视频同步及物体识别）
 	ActivateCameraController enumeration.Bool `json:"activateCameraController"`
+	// 是否启用摄像头云台控制模块
+	ActivateCameraHolderController enumeration.Bool `json:"activateCameraHolderController"`
 	// 是否启用动力系统模块（不启用无法行走）
 	ActivatePowerController enumeration.Bool `json:"activatePowerController"`
 

@@ -22,7 +22,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 		firmataAdaptor := firmata.NewAdaptor(config.ArduinoDeviceID)
 		connections = append(connections, firmataAdaptor)
 
-		if config.ActivateCameraController.True() {
+		if config.ActivateCameraHolderController.True() {
 			servoHorizon := gpio.NewServoDriver(firmataAdaptor, config.ServoHorizonPin)
 			servoVertical := gpio.NewServoDriver(firmataAdaptor, config.ServoVerticalPin)
 
