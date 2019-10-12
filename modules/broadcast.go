@@ -33,6 +33,7 @@ func (c *BroadcastController) Close() error {
 }
 
 func (c *BroadcastController) Start() {
+	global.Config.MessageBus.RegisterTopic(RemoteAddressTopic)
 	buffer := make([]byte, 1024)
 	for {
 		count, addr, err := c.conn.ReadFromUDP(buffer)

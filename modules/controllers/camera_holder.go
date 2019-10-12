@@ -26,6 +26,7 @@ func CameraHolderController(servoHorizon *gpio.ServoDriver, servoVertical *gpio.
 		logrus.Errorf("[HolderController] vertical servo move failed with err: %v", err)
 		return
 	}
+	messageBus.RegisterTopic(CameraHolderTopic)
 	messageBus.RegisterHandler("camera-holder-handler", CameraHolderTopic, func(e *bus2.Event) {
 		var err error
 		if evt, ok := e.Data.(*client.CameraHolderRequest); ok {

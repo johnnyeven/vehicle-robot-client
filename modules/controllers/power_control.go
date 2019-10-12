@@ -72,6 +72,7 @@ func (c *PowerController) Stop() error {
 }
 
 func (c *PowerController) Start() {
+	c.message.RegisterTopic(PowerControlTopic)
 	c.message.RegisterHandler("camera-moving-handler", PowerControlTopic, func(e *bus2.Event) {
 		var err error
 		if evt, ok := e.Data.(*client.PowerMovingRequest); ok {

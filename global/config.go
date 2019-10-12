@@ -21,7 +21,7 @@ var Config = struct {
 	ConfigAgent: &config_agent.Agent{
 		Host:               "localhost",
 		Port:               8002,
-		PullConfigInterval: 60,
+		PullConfigInterval: 10,
 		StackID:            123,
 	},
 
@@ -31,11 +31,5 @@ var Config = struct {
 		NodeKey: "123",
 	},
 
-	MessageBus: &bus.MessageBus{
-		RegisterTopics: []string{
-			"camera.holder",
-			"power.moving",
-			"remote.address",
-		},
-	},
+	MessageBus: &bus.MessageBus{},
 }
