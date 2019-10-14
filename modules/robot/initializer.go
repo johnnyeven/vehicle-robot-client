@@ -1,4 +1,4 @@
-package main
+package robot
 
 import (
 	"github.com/johnnyeven/libtools/bus"

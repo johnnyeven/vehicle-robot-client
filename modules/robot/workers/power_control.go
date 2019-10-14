@@ -9,6 +9,7 @@ import (
 	"gobot.io/x/gobot/drivers/gpio"
 )
 
+const powerWorkerID = "power-worker"
 const PowerControlTopic = "power.moving"
 const MaxPower float64 = 255
 
@@ -26,7 +27,7 @@ func NewPowerController(motorLeft *gpio.MotorDriver, motorRight *gpio.MotorDrive
 	}
 }
 
-func (c *PowerController) Forward(speed uint8) error {
+func (c *PowerController) forward(speed uint8) error {
 	err := c.motorLeft.Forward(speed)
 	if err != nil {
 		return err
@@ -35,7 +36,7 @@ func (c *PowerController) Forward(speed uint8) error {
 	return err
 }
 
-func (c *PowerController) Backward(speed uint8) error {
+func (c *PowerController) backward(speed uint8) error {
 	err := c.motorLeft.Backward(speed)
 	if err != nil {
 		return err
@@ -44,7 +45,7 @@ func (c *PowerController) Backward(speed uint8) error {
 	return err
 }
 
-func (c *PowerController) TurnLeft(speed uint8) error {
+func (c *PowerController) turnLeft(speed uint8) error {
 	err := c.motorLeft.Off()
 	if err != nil {
 		return err
@@ -53,7 +54,7 @@ func (c *PowerController) TurnLeft(speed uint8) error {
 	return err
 }
 
-func (c *PowerController) TurnRight(speed uint8) error {
+func (c *PowerController) turnRight(speed uint8) error {
 	err := c.motorRight.Off()
 	if err != nil {
 		return err
@@ -78,13 +79,13 @@ func (c *PowerController) Start() {
 		if evt, ok := e.Data.(*client.PowerMovingRequest); ok {
 			switch evt.Direction {
 			case constants.MOVING_DIRECTION__FORWARD:
-				err = c.Forward(uint8(evt.Speed * MaxPower))
+				err = c.forward(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__BACKWARD:
-				err = c.Backward(uint8(evt.Speed * MaxPower))
+				err = c.backward(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__TURN_LEFT:
-				err = c.TurnLeft(uint8(evt.Speed * MaxPower))
+				err = c.turnLeft(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__TURN_RIGHT:
-				err = c.TurnRight(uint8(evt.Speed * MaxPower))
+				err = c.turnRight(uint8(evt.Speed * MaxPower))
 			case constants.MOVING_DIRECTION__STOP:
 				err = c.Stop()
 			}
@@ -96,4 +97,12 @@ func (c *PowerController) Start() {
 			logrus.Errorf("[PowerController] camera-moving-handler Data type err: %s", "not PowerMovingRequest struct")
 		}
 	})
+}
+
+func (c *PowerController) WorkerID() string {
+	return powerWorkerID
+}
+
+func (c *PowerController) Restart() error {
+	panic("implement me")
 }

@@ -33,6 +33,7 @@ func (c *BroadcastController) Close() error {
 }
 
 func (c *BroadcastController) Start() {
+	defer c.Close()
 	global.Config.MessageBus.RegisterTopic(RemoteAddressTopic)
 	buffer := make([]byte, 1024)
 	for {
