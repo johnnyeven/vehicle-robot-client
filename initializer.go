@@ -4,7 +4,7 @@ import (
 	"github.com/johnnyeven/libtools/bus"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
-	"github.com/johnnyeven/vehicle-robot-client/modules/controllers"
+	"github.com/johnnyeven/vehicle-robot-client/modules/robot/workers"
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/api"
@@ -28,7 +28,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 
 			devices = append(devices, servoHorizon, servoVertical)
 			moduleWorkers = append(moduleWorkers, func() {
-				controllers.CameraHolderController(servoHorizon, servoVertical, messageBus)
+				workers.CameraHolderController(servoHorizon, servoVertical, messageBus)
 			})
 		}
 
@@ -37,7 +37,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 			motorLeft.DirectionPin = config.LeftMotorDirectionPin
 			motorRight := gpio.NewMotorDriver(firmataAdaptor, config.RightMotorSpeedPin)
 			motorRight.DirectionPin = config.RightMotorDirectionPin
-			powerController := controllers.NewPowerController(motorLeft, motorRight, messageBus)
+			powerController := workers.NewPowerController(motorLeft, motorRight, messageBus)
 
 			devices = append(devices, motorLeft, motorRight)
 			moduleWorkers = append(moduleWorkers, func() {
@@ -56,7 +56,7 @@ func CreateRobotFromConfig(config global.RobotConfiguration, messageBus *bus.Mes
 		camera.Set(gocv.VideoCaptureFPS, 1)
 
 		moduleWorkers = append(moduleWorkers, func() {
-			controllers.ObjectDetectiveController(config, camera, robotClient)
+			workers.ObjectDetectiveController(config, camera, robotClient)
 		})
 	}
 

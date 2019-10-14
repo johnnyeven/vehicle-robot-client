@@ -1,4 +1,4 @@
-package controllers
+package workers
 
 import (
 	"github.com/johnnyeven/libtools/bus"

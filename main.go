@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/johnnyeven/libtools/config_agent"
 	"github.com/johnnyeven/libtools/servicex"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
@@ -20,6 +21,7 @@ func main() {
 	go global.Config.ConfigAgent.Start()
 
 	global.Config.MessageBus.RegisterHandler("remote-address-handler", modules.RemoteAddressTopic, handleAddressEvent)
+	global.Config.MessageBus.RegisterHandler("configuration-diff-handler", config_agent.DiffConfigTopic, handleDiffConfigEvent)
 
 	broadcast := modules.NewBroadcastController()
 	defer broadcast.Close()
@@ -40,6 +42,12 @@ func handleAddressEvent(e *bus.Event) {
 
 		robots := CreateRobotFromConfig(global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
 		robots.Start()
+	}
+}
+
+func handleDiffConfigEvent(e *bus.Event) {
+	if _, ok := e.Data.(config_agent.DiffConfig); ok {
+
 	}
 }
 
