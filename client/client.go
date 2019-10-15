@@ -15,13 +15,16 @@ type RobotClient struct {
 	NodeKey    string `conf:"env"`
 }
 
-func (c *RobotClient) Start() {
+func (c *RobotClient) Init() {
 	if c.NodeKey == "" {
 		logrus.Panicf("RobotClient NodeKey must not be empty")
 	}
-	var stat *tp.Status
 	tp.SetDefaultProtoFunc(pbproto.NewPbProtoFunc())
 	c.cli = tp.NewPeer(tp.PeerConfig{})
+}
+
+func (c *RobotClient) Start() {
+	var stat *tp.Status
 
 	c.sess, stat = c.cli.Dial(c.RemoteAddr)
 	if !stat.OK() {

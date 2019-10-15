@@ -5,10 +5,12 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
 	"github.com/johnnyeven/vehicle-robot-client/modules/robot"
+	"github.com/johnnyeven/vehicle-robot-client/routes"
 )
 
 func main() {
 	servicex.Execute()
+	routes.InitRouters()
 
 	global.Config.ConfigAgent.BindConf(&global.Config.RobotConfiguration)
 	global.Config.ConfigAgent.BindBus(global.Config.MessageBus)

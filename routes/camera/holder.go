@@ -3,11 +3,11 @@ package camera
 import (
 	tp "github.com/henrylee2cn/teleport"
 	"github.com/johnnyeven/vehicle-robot-client/client"
-	"github.com/johnnyeven/vehicle-robot-client/modules/robot/workers"
+	"github.com/johnnyeven/vehicle-robot-client/modules/robot"
 )
 
 func (c *Camera) Holder(req *client.CameraHolderRequest) *tp.Status {
-	_, err := c.messageBus.Emit(workers.CameraHolderTopic, req, "")
+	_, err := c.messageBus.Emit(robot.CameraHolderTopic, req, "")
 	if err != nil {
 		return tp.NewStatus(99, "", err)
 	}

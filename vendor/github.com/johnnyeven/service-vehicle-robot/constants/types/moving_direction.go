@@ -1,4 +1,4 @@
-package constants
+package types
 
 //go:generate libtools gen enum MovingDirection
 // swagger:enum

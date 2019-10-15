@@ -1,6 +1,8 @@
 package client
 
-import "github.com/johnnyeven/vehicle-robot-client/constants"
+import (
+	"github.com/johnnyeven/service-vehicle-robot/constants/types"
+)
 
 type BroadcastRequest struct {
 	Port uint16 `json:"port"`
@@ -22,8 +24,8 @@ type AuthRequest struct {
 }
 
 type PowerMovingRequest struct {
-	Direction constants.MovingDirection `json:"direction"`
-	Speed     float64                   `json:"speed"`
+	Direction types.MovingDirection `json:"direction"`
+	Speed     float64               `json:"speed"`
 }
 
 type CameraHolderRequest struct {

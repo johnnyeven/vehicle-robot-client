@@ -7,7 +7,6 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
-	"github.com/johnnyeven/vehicle-robot-client/routes"
 	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
@@ -21,12 +20,14 @@ type Robot struct {
 	configurations *global.RobotConfiguration
 	master         *gobot.Master
 	workers        map[string]Worker
+	devices        map[string]gobot.Device
+	connections    map[string]gobot.Connection
 
-	bus    *bus.MessageBus
-	server *client.RobotClient
+	bus *bus.MessageBus
+	cli *client.RobotClient
 }
 
-func NewRobot(server *client.RobotClient, bus *bus.MessageBus, config *global.RobotConfiguration) *Robot {
+func NewRobot(cli *client.RobotClient, bus *bus.MessageBus, config *global.RobotConfiguration) *Robot {
 	if bus == nil {
 		logrus.Panic("MessageBus can not be nil")
 	}
@@ -34,7 +35,7 @@ func NewRobot(server *client.RobotClient, bus *bus.MessageBus, config *global.Ro
 		configurations: config,
 		workers:        make(map[string]Worker),
 		bus:            bus,
-		server:         server,
+		cli:            cli,
 	}
 
 	return r
@@ -78,17 +79,44 @@ func (r *Robot) RestartWorker(workerID string) error {
 	return w.Restart()
 }
 
+func (r *Robot) AddDevice(d ...gobot.Device) {
+	for _, dev := range d {
+		r.devices[dev.Name()] = dev
+	}
+}
+
+func (r *Robot) GetDevice(name string) gobot.Device {
+	if d, ok := r.devices[name]; ok {
+		return d
+	}
+
+	return nil
+}
+
+func (r *Robot) AddConnection(c ...gobot.Connection) {
+	for _, conn := range c {
+		r.connections[conn.Name()] = conn
+	}
+}
+
+func (r *Robot) GetConnection(name string) gobot.Connection {
+	if c, ok := r.connections[name]; ok {
+		return c
+	}
+
+	return nil
+}
+
 func (r *Robot) handleAddressEvent(e *bus2.Event) {
 	if addr, ok := e.Data.(*net.UDPAddr); ok {
 		addr := net.TCPAddr{
 			IP:   addr.IP,
 			Port: addr.Port,
 		}
-		r.server.RemoteAddr = addr.String()
-		r.server.Start()
-		routes.InitRouters()
+		r.cli.RemoteAddr = addr.String()
+		r.cli.Start()
 
-		robots := CreateRobotFromConfig(global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
+		robots := CreateRobotFromConfig(r, &global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
 		robots.Start()
 	}
 }
