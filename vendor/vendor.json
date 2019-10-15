@@ -362,10 +362,10 @@
 			"revisionTime": "2019-10-12T10:24:32Z"
 		},
 		{
-			"checksumSHA1": "B5bFknJjXk2/90iRByRAxUNRrQg=",
+			"checksumSHA1": "Q8YEqhlhFJF+FtR4vFY0+MLTs9M=",
 			"path": "github.com/johnnyeven/libtools/clients/client_configurations",
-			"revision": "95bb44019fe618b90f1168a6a1d44f25bd7fe2ca",
-			"revisionTime": "2019-09-05T15:12:34Z"
+			"revision": "dc813b81c4351bf7bfa0fbb53d5c70e362a18449",
+			"revisionTime": "2019-10-15T09:51:20Z"
 		},
 		{
 			"checksumSHA1": "BFQR9OPWYz7e7Oe9eP2NDASoaks=",
@@ -374,10 +374,10 @@
 			"revisionTime": "2019-09-05T15:12:34Z"
 		},
 		{
-			"checksumSHA1": "hdSZNf0TBQ0kCaWUXQvmJehzwUQ=",
+			"checksumSHA1": "n3BOQrFBzVwL+lHjU7iUo0XZvoA=",
 			"path": "github.com/johnnyeven/libtools/config_agent",
-			"revision": "e53c1d4c36ed51aae85734c6ed6f643742f42d03",
-			"revisionTime": "2019-10-14T11:24:42Z"
+			"revision": "dc813b81c4351bf7bfa0fbb53d5c70e362a18449",
+			"revisionTime": "2019-10-15T09:51:20Z"
 		},
 		{
 			"checksumSHA1": "69txjtq43bcpcLCTGWhYxOmGeGU=",
