@@ -12,8 +12,9 @@ var InvalidRobotMode = errors.New("invalid RobotMode")
 
 func init() {
 	github_com_johnnyeven_libtools_courier_enumeration.RegisterEnums("RobotMode", map[string]string{
-		"MANUAL": "人工控制",
-		"SEARCH": "搜寻模式",
+		"EXPLORE": "探索模式",
+		"MANUAL":  "人工控制",
+		"SEARCH":  "搜寻模式",
 	})
 }
 
@@ -21,6 +22,8 @@ func ParseRobotModeFromString(s string) (RobotMode, error) {
 	switch s {
 	case "":
 		return ROBOT_MODE_UNKNOWN, nil
+	case "EXPLORE":
+		return ROBOT_MODE__EXPLORE, nil
 	case "MANUAL":
 		return ROBOT_MODE__MANUAL, nil
 	case "SEARCH":
@@ -33,6 +36,8 @@ func ParseRobotModeFromLabelString(s string) (RobotMode, error) {
 	switch s {
 	case "":
 		return ROBOT_MODE_UNKNOWN, nil
+	case "探索模式":
+		return ROBOT_MODE__EXPLORE, nil
 	case "人工控制":
 		return ROBOT_MODE__MANUAL, nil
 	case "搜寻模式":
@@ -47,14 +52,17 @@ func (RobotMode) EnumType() string {
 
 func (RobotMode) Enums() map[int][]string {
 	return map[int][]string{
-		int(ROBOT_MODE__MANUAL): {"MANUAL", "人工控制"},
-		int(ROBOT_MODE__SEARCH): {"SEARCH", "搜寻模式"},
+		int(ROBOT_MODE__EXPLORE): {"EXPLORE", "探索模式"},
+		int(ROBOT_MODE__MANUAL):  {"MANUAL", "人工控制"},
+		int(ROBOT_MODE__SEARCH):  {"SEARCH", "搜寻模式"},
 	}
 }
 func (v RobotMode) String() string {
 	switch v {
 	case ROBOT_MODE_UNKNOWN:
 		return ""
+	case ROBOT_MODE__EXPLORE:
+		return "EXPLORE"
 	case ROBOT_MODE__MANUAL:
 		return "MANUAL"
 	case ROBOT_MODE__SEARCH:
@@ -67,6 +75,8 @@ func (v RobotMode) Label() string {
 	switch v {
 	case ROBOT_MODE_UNKNOWN:
 		return ""
+	case ROBOT_MODE__EXPLORE:
+		return "探索模式"
 	case ROBOT_MODE__MANUAL:
 		return "人工控制"
 	case ROBOT_MODE__SEARCH:

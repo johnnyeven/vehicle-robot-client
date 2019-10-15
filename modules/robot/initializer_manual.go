@@ -5,6 +5,7 @@ import (
 	"github.com/johnnyeven/service-vehicle-robot/constants/types"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
+	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/api"
 )
@@ -14,6 +15,7 @@ func init() {
 }
 
 func createRobotManual(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
+	logrus.Info("initial manual robot...")
 	if config.ActivateFirmata.True() {
 		if config.ActivateCameraHolderController.True() {
 			cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
