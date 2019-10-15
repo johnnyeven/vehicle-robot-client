@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/johnnyeven/libtools/bus"
 	"github.com/johnnyeven/libtools/config_agent"
+	"github.com/johnnyeven/service-vehicle-robot/constants/types"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
@@ -15,6 +16,25 @@ import (
 	"os/signal"
 	"syscall"
 )
+
+type RobotInitializer func(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master
+
+type RobotFactory struct {
+	initializer map[types.RobotMode]RobotInitializer
+}
+
+func (factory RobotFactory) RegisterInitializer(t types.RobotMode, f RobotInitializer) {
+	factory.initializer[t] = f
+}
+
+func (factory RobotFactory) GetInstance(t types.RobotMode, robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
+	if i, ok := factory.initializer[t]; ok {
+		return i(robot, config, messageBus, robotClient)
+	}
+	return nil
+}
+
+var factory = RobotFactory{initializer: make(map[types.RobotMode]RobotInitializer)}
 
 type Robot struct {
 	configurations *global.RobotConfiguration
@@ -126,9 +146,12 @@ func (r *Robot) handleAddressEvent(e *bus2.Event) {
 		r.cli.RemoteAddr = addr.String()
 		r.cli.Start()
 
-		robots := CreateRobotFromConfig(r, &global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
+		master := factory.GetInstance(r.configurations.RobotMode, r, &global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
+		if master == nil {
+			return
+		}
 
-		r.master = robots
+		r.master = master
 		r.startRobot()
 	}
 }
@@ -146,7 +169,6 @@ func (r *Robot) gracefulRun() {
 	select {
 	case <-ch:
 		signal.Stop(ch)
-		r.Stop()
 		break
 	}
 }

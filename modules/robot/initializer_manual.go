@@ -2,13 +2,18 @@ package robot
 
 import (
 	"github.com/johnnyeven/libtools/bus"
+	"github.com/johnnyeven/service-vehicle-robot/constants/types"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/api"
 )
 
-func CreateRobotFromConfig(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
+func init() {
+	factory.RegisterInitializer(types.ROBOT_MODE__MANUAL, createRobotManual)
+}
+
+func createRobotManual(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
 	if config.ActivateFirmata.True() {
 		if config.ActivateCameraHolderController.True() {
 			cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
