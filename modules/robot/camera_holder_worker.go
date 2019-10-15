@@ -46,18 +46,6 @@ func NewCameraHolderWorker(robot *Robot, bus *bus.MessageBus, config *global.Rob
 	servoVertical := gpio.NewServoDriver(firmataAdaptor, config.ServoVerticalPin)
 	servoVertical.SetName(config.ServoVerticalName)
 
-	logrus.Infof("[CameraHolderWorker] Init servos to center angle: %d", CentreAngle)
-	err := servoHorizon.Move(CentreAngle)
-	if err != nil {
-		logrus.Errorf("[CameraHolderWorker] horizon servo move failed with err: %v", err)
-		return nil
-	}
-	err = servoVertical.Move(CentreAngle)
-	if err != nil {
-		logrus.Errorf("[CameraHolderWorker] vertical servo move failed with err: %v", err)
-		return nil
-	}
-
 	return &CameraHolderWorker{
 		servoHorizon:         servoHorizon,
 		servoVertical:        servoVertical,
@@ -72,6 +60,18 @@ func (c *CameraHolderWorker) WorkerID() string {
 }
 
 func (c *CameraHolderWorker) Start() {
+	logrus.Infof("[CameraHolderWorker] Init servos to center angle: %d", CentreAngle)
+	err := c.servoHorizon.Move(CentreAngle)
+	if err != nil {
+		logrus.Errorf("[CameraHolderWorker] horizon servo move failed with err: %v", err)
+		return
+	}
+	err = c.servoVertical.Move(CentreAngle)
+	if err != nil {
+		logrus.Errorf("[CameraHolderWorker] vertical servo move failed with err: %v", err)
+		return
+	}
+
 	c.bus.RegisterTopic(CameraHolderTopic)
 	c.bus.RegisterHandler(cameraHolderEventHandler, CameraHolderTopic, func(e *bus2.Event) {
 		var err error

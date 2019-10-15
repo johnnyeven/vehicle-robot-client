@@ -34,6 +34,8 @@ func NewRobot(cli *client.RobotClient, bus *bus.MessageBus, config *global.Robot
 	r := &Robot{
 		configurations: config,
 		workers:        make(map[string]Worker),
+		devices:        make(map[string]gobot.Device),
+		connections:    make(map[string]gobot.Connection),
 		bus:            bus,
 		cli:            cli,
 	}
