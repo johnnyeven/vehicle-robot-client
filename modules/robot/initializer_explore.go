@@ -21,7 +21,7 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	powerControlWorker := NewPowerWorker(robot, messageBus, config)
 	robot.AddWorker(powerControlWorker)
 
-	cameraWorker := NewCameraWorker(robot, messageBus, robotClient, config)
+	cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
 	robot.AddWorker(cameraWorker)
 
 	r := gobot.NewRobot("VehicleRobot")

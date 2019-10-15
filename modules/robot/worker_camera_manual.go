@@ -17,40 +17,42 @@ import (
 )
 
 const (
-	cameraWorkerID = "camera-worker"
+	cameraManualWorkerID = "camera-manual-worker"
 )
 
-type CameraWorker struct {
+type CameraManualWorker struct {
 	camera *gocv.VideoCapture
 	cli    *client.RobotClient
 	bus    *bus.MessageBus
 
+	robotMode              types.RobotMode
 	cameraMode             types.CameraMode
 	activateCameraTransfer enumeration.Bool
 }
 
-func NewCameraWorker(robot *Robot, bus *bus.MessageBus, cli *client.RobotClient, config *global.RobotConfiguration) *CameraWorker {
+func NewCameraManualWorker(robot *Robot, bus *bus.MessageBus, cli *client.RobotClient, config *global.RobotConfiguration) *CameraManualWorker {
 	camera, err := gocv.VideoCaptureDevice(0)
 	if err != nil {
-		logrus.Panicf("[CameraWorker] gocv.VideoCaptureDevice err: %v", err)
+		logrus.Panicf("[CameraManualWorker] gocv.VideoCaptureDevice err: %v", err)
 	}
 	camera.Set(gocv.VideoCaptureFrameWidth, float64(config.CameraCaptureWidth))
 	camera.Set(gocv.VideoCaptureFrameHeight, float64(config.CameraCaptureHeight))
 
-	return &CameraWorker{
+	return &CameraManualWorker{
 		camera:                 camera,
 		cli:                    cli,
 		bus:                    bus,
+		robotMode:              config.RobotMode,
 		cameraMode:             config.CameraMode,
 		activateCameraTransfer: config.ActivateCameraTransfer,
 	}
 }
 
-func (c *CameraWorker) WorkerID() string {
-	return cameraWorkerID
+func (c *CameraManualWorker) WorkerID() string {
+	return cameraManualWorkerID
 }
 
-func (c *CameraWorker) Start() {
+func (c *CameraManualWorker) Start() {
 	for {
 		cameraImage := gocv.NewMat()
 		if !c.camera.Read(&cameraImage) {
@@ -59,7 +61,7 @@ func (c *CameraWorker) Start() {
 
 		sourceImg, err := cameraImage.ToImage()
 		if err != nil {
-			fmt.Println("[CameraWorker] cameraImage.ToImag err: ", err.Error())
+			fmt.Println("[CameraManualWorker] cameraImage.ToImag err: ", err.Error())
 			return
 		}
 
@@ -71,12 +73,12 @@ func (c *CameraWorker) Start() {
 			buf := bytes.NewBuffer([]byte{})
 			err = jpeg.Encode(buf, img, &jpeg.Options{Quality: 75})
 			if err != nil {
-				fmt.Println("[CameraWorker] jpeg.Encode err: ", err.Error())
+				fmt.Println("[CameraManualWorker] jpeg.Encode err: ", err.Error())
 				return
 			}
 			resp, err := c.cli.DetectionObject(buf.Bytes())
 			if err != nil {
-				fmt.Println("[CameraWorker] cli.DetectionObject request err: ", err)
+				fmt.Println("[CameraManualWorker] cli.DetectionObject request err: ", err)
 				return
 			}
 
@@ -95,23 +97,23 @@ func (c *CameraWorker) Start() {
 			buf := bytes.NewBuffer([]byte{})
 			err = jpeg.Encode(buf, img, &jpeg.Options{Quality: 75})
 			if err != nil {
-				fmt.Println("[CameraWorker] jpeg.Encode err: ", err.Error())
+				fmt.Println("[CameraManualWorker] jpeg.Encode err: ", err.Error())
 				return
 			}
 
 			err = c.cli.CameraTransfer(buf.Bytes())
 			if err != nil {
-				fmt.Println("[CameraWorker] cli.CameraTransfer push err: ", err)
+				fmt.Println("[CameraManualWorker] cli.CameraTransfer push err: ", err)
 				return
 			}
 		}
 	}
 }
 
-func (c *CameraWorker) Restart() error {
+func (c *CameraManualWorker) Restart() error {
 	panic("implement me")
 }
 
-func (c *CameraWorker) Stop() error {
+func (c *CameraManualWorker) Stop() error {
 	return c.camera.Close()
 }

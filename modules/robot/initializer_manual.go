@@ -29,7 +29,7 @@ func createRobotManual(robot *Robot, config *global.RobotConfiguration, messageB
 	}
 
 	if config.ActivateCameraController.True() {
-		cameraWorker := NewCameraWorker(robot, messageBus, robotClient, config)
+		cameraWorker := NewCameraManualWorker(robot, messageBus, robotClient, config)
 		robot.AddWorker(cameraWorker)
 	}
 
