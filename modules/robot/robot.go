@@ -50,6 +50,14 @@ func (r *Robot) Start() {
 	r.gracefulRun()
 }
 
+func (r *Robot) startRobot() {
+	r.master.Start()
+}
+
+func (r *Robot) Stop() error {
+	return r.master.Stop()
+}
+
 func (r *Robot) AddWorker(w Worker) error {
 	if _, ok := r.workers[w.WorkerID()]; ok {
 		return fmt.Errorf("worker id duplicated: %s", w.WorkerID())
@@ -119,7 +127,9 @@ func (r *Robot) handleAddressEvent(e *bus2.Event) {
 		r.cli.Start()
 
 		robots := CreateRobotFromConfig(r, &global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
-		robots.Start()
+
+		r.master = robots
+		r.startRobot()
 	}
 }
 
@@ -136,6 +146,7 @@ func (r *Robot) gracefulRun() {
 	select {
 	case <-ch:
 		signal.Stop(ch)
+		r.Stop()
 		break
 	}
 }
