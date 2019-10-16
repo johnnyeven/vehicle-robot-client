@@ -15,6 +15,9 @@ func init() {
 
 func createRobotExplore(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot {
 	logrus.Info("initial explore robot...")
+	mainWorker := NewExploreMainWorker(robot, config, messageBus, robotClient)
+	robot.AddWorker(mainWorker)
+
 	cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
 	robot.AddWorker(cameraHolderWorker)
 

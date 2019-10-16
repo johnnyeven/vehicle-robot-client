@@ -96,7 +96,7 @@ func (c *CameraHolderWorker) Start() {
 }
 
 func (c *CameraHolderWorker) Restart() error {
-	panic("implement me")
+	return nil
 }
 
 func (c *CameraHolderWorker) Stop() error {

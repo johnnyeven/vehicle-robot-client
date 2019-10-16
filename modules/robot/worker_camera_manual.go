@@ -111,7 +111,7 @@ func (c *CameraManualWorker) Start() {
 }
 
 func (c *CameraManualWorker) Restart() error {
-	panic("implement me")
+	return nil
 }
 
 func (c *CameraManualWorker) Stop() error {

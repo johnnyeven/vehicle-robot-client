@@ -76,7 +76,11 @@ func (r *Robot) startRobot() {
 }
 
 func (r *Robot) Stop() error {
-	return r.master.Stop()
+	for _, worker := range r.workers {
+		worker.Stop()
+	}
+
+	return nil
 }
 
 func (r *Robot) AddWorker(w Worker) error {
@@ -192,6 +196,7 @@ func (r *Robot) gracefulRun() {
 	select {
 	case <-ch:
 		signal.Stop(ch)
+		r.Stop()
 		break
 	}
 }

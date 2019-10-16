@@ -1,21 +1,20 @@
 package robot
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/johnnyeven/libtools/bus"
 	"github.com/johnnyeven/libtools/courier/enumeration"
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
-	"github.com/johnnyeven/vehicle-robot-client/modules"
+	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
 	"gocv.io/x/gocv"
-	"image"
-	"image/jpeg"
 )
 
 const (
-	cameraExploreWorkerID = "camera-explore-worker"
+	cameraExploreWorkerID     = "camera-explore-worker"
+	cameraCaptureTopic        = "camera.capture"
+	cameraCaptureEventHandler = "camera-capture-handler"
 )
 
 type CameraExploreWorker struct {
@@ -48,66 +47,27 @@ func (c *CameraExploreWorker) WorkerID() string {
 }
 
 func (c *CameraExploreWorker) Start() {
-	for {
+	c.bus.RegisterTopic(cameraCaptureTopic)
+	c.bus.RegisterHandler(cameraCaptureEventHandler, cameraCaptureTopic, func(e *bus2.Event) {
 		cameraImage := gocv.NewMat()
 		if !c.camera.Read(&cameraImage) {
-			break
+			return
 		}
-
 		img, err := cameraImage.ToImage()
 		if err != nil {
 			fmt.Println("[CameraExploreWorker] cameraImage.ToImag err: ", err.Error())
 			return
 		}
-		sourceImg, ok := img.(*image.RGBA)
-		if !ok {
-			logrus.Error("[CameraExploreWorker] img.(*image.RGBA) not *image.RGBA")
-			return
-		}
-
-		buf := bytes.NewBuffer([]byte{})
-		err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 75})
-		if err != nil {
-			fmt.Println("[CameraExploreWorker] jpeg.Encode err: ", err.Error())
-			return
-		}
-		resp, err := c.cli.DetectionObject(buf.Bytes())
-		if err != nil {
-			fmt.Println("[CameraExploreWorker] cli.DetectionObject request err: ", err)
-			return
-		}
-
-		if c.activateCameraTransfer.True() {
-			for _, detectived := range resp {
-				x1 := float32(sourceImg.Bounds().Max.X) * detectived.Box[1]
-				x2 := float32(sourceImg.Bounds().Max.X) * detectived.Box[3]
-				y1 := float32(sourceImg.Bounds().Max.Y) * detectived.Box[0]
-				y2 := float32(sourceImg.Bounds().Max.Y) * detectived.Box[2]
-
-				modules.Rect(sourceImg, int(x1), int(y1), int(x2), int(y2), 4, modules.GetLabelColor(int(detectived.Class)))
-				modules.DrawLabel(sourceImg, int(x1), int(y1), int(detectived.Class), detectived.Label)
-			}
-
-			buf := bytes.NewBuffer([]byte{})
-			err = jpeg.Encode(buf, sourceImg, &jpeg.Options{Quality: 75})
-			if err != nil {
-				fmt.Println("[CameraExploreWorker] jpeg.Encode err: ", err.Error())
-				return
-			}
-
-			err = c.cli.CameraTransfer(buf.Bytes())
-			if err != nil {
-				fmt.Println("[CameraExploreWorker] cli.CameraTransfer push err: ", err)
-				return
-			}
-		}
-	}
+		c.bus.Emit(cameraCaptureResultTopic, img, "")
+	})
+	c.bus.Emit(cameraCaptureTopic, nil, "")
 }
 
 func (c *CameraExploreWorker) Restart() error {
-	panic("implement me")
+	return nil
 }
 
 func (c *CameraExploreWorker) Stop() error {
+	c.bus.DeregisterHandler(cameraCaptureEventHandler)
 	return c.camera.Close()
 }
