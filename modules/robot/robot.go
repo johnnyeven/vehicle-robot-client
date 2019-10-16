@@ -11,13 +11,14 @@ import (
 	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
+	"gobot.io/x/gobot/api"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-type RobotInitializer func(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master
+type RobotInitializer func(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot
 
 type RobotFactory struct {
 	initializer map[types.RobotMode]RobotInitializer
@@ -27,7 +28,7 @@ func (factory RobotFactory) RegisterInitializer(t types.RobotMode, f RobotInitia
 	factory.initializer[t] = f
 }
 
-func (factory RobotFactory) GetInstance(t types.RobotMode, robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
+func (factory RobotFactory) GetInstance(t types.RobotMode, robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot {
 	if i, ok := factory.initializer[t]; ok {
 		return i(robot, config, messageBus, robotClient)
 	}
@@ -146,9 +147,31 @@ func (r *Robot) handleAddressEvent(e *bus2.Event) {
 		r.cli.RemoteAddr = addr.String()
 		r.cli.Start()
 
-		master := factory.GetInstance(r.configurations.RobotMode, r, &global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
-		if master == nil {
+		robot := factory.GetInstance(r.configurations.RobotMode, r, &global.Config.RobotConfiguration, global.Config.MessageBus, global.Config.RobotClient)
+		if robot == nil {
 			return
+		}
+
+		master := gobot.NewMaster()
+
+		for _, c := range r.connections {
+			r.AddConnection(c)
+		}
+		for _, d := range r.devices {
+			r.AddDevice(d)
+		}
+		robot.Work = func() {
+			for _, worker := range r.workers {
+				worker.Start()
+			}
+		}
+
+		master.AddRobot(robot)
+
+		if r.configurations.ActivateApiSupport.True() {
+			apiServer := api.NewAPI(master)
+			apiServer.Port = r.configurations.APIServerPort
+			apiServer.Start()
 		}
 
 		r.master = master

@@ -13,7 +13,7 @@ func init() {
 	factory.RegisterInitializer(types.ROBOT_MODE__EXPLORE, createRobotExplore)
 }
 
-func createRobotExplore(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Master {
+func createRobotExplore(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot {
 	logrus.Info("initial explore robot...")
 	cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
 	robot.AddWorker(cameraHolderWorker)
@@ -24,21 +24,6 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
 	robot.AddWorker(cameraWorker)
 
-	r := gobot.NewRobot("VehicleRobot")
-	for _, c := range robot.connections {
-		r.AddConnection(c)
-	}
-	for _, d := range robot.devices {
-		r.AddDevice(d)
-	}
-	r.Work = func() {
-		for _, worker := range robot.workers {
-			worker.Start()
-		}
-	}
-
-	master := gobot.NewMaster()
-	master.AddRobot(r)
-
-	return master
+	r := gobot.NewRobot("VehicleRobotExplore")
+	return r
 }
