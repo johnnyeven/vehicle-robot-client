@@ -46,6 +46,8 @@ func NewCameraHolderWorker(robot *Robot, bus *bus.MessageBus, config *global.Rob
 	servoVertical := gpio.NewServoDriver(firmataAdaptor, config.ServoVerticalPin)
 	servoVertical.SetName(config.ServoVerticalName)
 
+	robot.AddDevice(servoHorizon, servoVertical)
+
 	return &CameraHolderWorker{
 		servoHorizon:         servoHorizon,
 		servoVertical:        servoVertical,
