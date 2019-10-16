@@ -19,8 +19,9 @@ const (
 )
 
 type ExploreMainWorker struct {
-	bus *bus.MessageBus
-	cli *client.RobotClient
+	config *global.RobotConfiguration
+	bus    *bus.MessageBus
+	cli    *client.RobotClient
 }
 
 func NewExploreMainWorker(robot *Robot, config *global.RobotConfiguration, bus *bus.MessageBus, cli *client.RobotClient) *ExploreMainWorker {
@@ -47,7 +48,9 @@ func (e *ExploreMainWorker) Start() {
 			logrus.Errorf("[ExploreMainWorker] ExploreMainWorker.objectDetective err: %v", err)
 		}
 
-		_ = e.transferScreen(sourceImg, detectived)
+		if e.config.ActivateCameraTransfer.True() {
+			_ = e.transferScreen(sourceImg, detectived)
+		}
 		e.bus.Emit(cameraCaptureTopic, nil, "")
 	})
 }
