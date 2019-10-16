@@ -159,10 +159,10 @@ func (r *Robot) handleAddressEvent(e *bus2.Event) {
 		master := gobot.NewMaster()
 
 		for _, c := range r.connections {
-			r.AddConnection(c)
+			robot.AddConnection(c)
 		}
 		for _, d := range r.devices {
-			r.AddDevice(d)
+			robot.AddDevice(d)
 		}
 		robot.Work = func() {
 			for _, worker := range r.workers {
