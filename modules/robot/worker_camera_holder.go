@@ -100,7 +100,6 @@ func (c *CameraHolderWorker) Restart() error {
 }
 
 func (c *CameraHolderWorker) Stop() error {
-	c.bus.DeregisterHandler(cameraHolderEventHandler)
 	c.servoVertical.Move(CentreAngle)
 	c.servoHorizon.Move(CentreAngle)
 	return nil

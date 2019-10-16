@@ -68,6 +68,5 @@ func (c *CameraExploreWorker) Restart() error {
 }
 
 func (c *CameraExploreWorker) Stop() error {
-	c.bus.DeregisterHandler(cameraCaptureEventHandler)
 	return c.camera.Close()
 }

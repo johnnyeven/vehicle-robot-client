@@ -90,7 +90,6 @@ func (c *PowerWorker) turnRight(speed uint8) error {
 }
 
 func (c *PowerWorker) Stop() error {
-	c.bus.DeregisterHandler(powerControlEventHandler)
 	err := c.motorRight.Off()
 	if err != nil {
 		return err
@@ -131,5 +130,5 @@ func (c *PowerWorker) WorkerID() string {
 }
 
 func (c *PowerWorker) Restart() error {
-	panic("implement me")
+	return nil
 }

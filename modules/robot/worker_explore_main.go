@@ -57,7 +57,6 @@ func (e *ExploreMainWorker) Restart() error {
 }
 
 func (e *ExploreMainWorker) Stop() error {
-	e.bus.DeregisterHandler(cameraCaptureResultEventHandler)
 	return nil
 }
 
