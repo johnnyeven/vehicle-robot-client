@@ -71,4 +71,7 @@ type RobotConfiguration struct {
 	DistanceServoHorizonPin string `json:"distanceServoHorizonPin" default:"5"`
 	// 距离传感器云台水平舵机名称
 	DistanceServoHorizonName string `json:"distanceServoHorizonName" default:"distanceServoHorizon"`
+
+	// 姿态传感器名称
+	AttitudeName string `json:"attitudeName" default:"attitude"`
 }

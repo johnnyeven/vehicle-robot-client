@@ -19,6 +19,7 @@ func (c *RobotClient) Init() {
 	if c.NodeKey == "" {
 		logrus.Panicf("RobotClient NodeKey must not be empty")
 	}
+	tp.SetLoggerLevel2(tp.ERROR)()
 	tp.SetDefaultProtoFunc(pbproto.NewPbProtoFunc())
 	c.cli = tp.NewPeer(tp.PeerConfig{})
 }
