@@ -11,11 +11,9 @@ import (
 )
 
 const (
-	cameraHolderWorkerID           = "camera-holder-worker"
-	CameraHolderTopic              = "camera.holder"
-	cameraHolderEventHandler       = "camera-holder-handler"
-	MaxAngle                 uint8 = 180
-	CentreAngle              uint8 = 90
+	cameraHolderWorkerID     = "camera-holder-worker"
+	CameraHolderTopic        = "camera.holder"
+	cameraHolderEventHandler = "camera-holder-handler"
 )
 
 type CameraHolderWorker struct {
@@ -52,8 +50,8 @@ func NewCameraHolderWorker(robot *Robot, bus *bus.MessageBus, config *global.Rob
 		servoHorizon:         servoHorizon,
 		servoVertical:        servoVertical,
 		bus:                  bus,
-		currentHorizonAngle:  CentreAngle,
-		currentVerticalAngle: CentreAngle,
+		currentHorizonAngle:  ServoCentreAngle,
+		currentVerticalAngle: ServoCentreAngle,
 	}
 }
 
@@ -62,13 +60,13 @@ func (c *CameraHolderWorker) WorkerID() string {
 }
 
 func (c *CameraHolderWorker) Start() {
-	logrus.Infof("[CameraHolderWorker] Init servos to center angle: %d", CentreAngle)
-	err := c.servoHorizon.Move(CentreAngle)
+	logrus.Infof("[CameraHolderWorker] Init servos to center angle: %d", ServoCentreAngle)
+	err := c.servoHorizon.Move(ServoCentreAngle)
 	if err != nil {
 		logrus.Errorf("[CameraHolderWorker] horizon servo move failed with err: %v", err)
 		return
 	}
-	err = c.servoVertical.Move(CentreAngle)
+	err = c.servoVertical.Move(ServoCentreAngle)
 	if err != nil {
 		logrus.Errorf("[CameraHolderWorker] vertical servo move failed with err: %v", err)
 		return
@@ -100,17 +98,7 @@ func (c *CameraHolderWorker) Restart() error {
 }
 
 func (c *CameraHolderWorker) Stop() error {
-	c.servoVertical.Move(CentreAngle)
-	c.servoHorizon.Move(CentreAngle)
+	c.servoVertical.Move(ServoCentreAngle)
+	c.servoHorizon.Move(ServoCentreAngle)
 	return nil
-}
-
-func servoAngleChange(current uint8, offset float64) uint8 {
-	current = uint8(float64(current) + offset)
-	if current < 0 {
-		current = 0
-	} else if current > MaxAngle {
-		current = MaxAngle
-	}
-	return current
 }

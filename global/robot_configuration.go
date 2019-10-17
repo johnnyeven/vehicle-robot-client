@@ -35,24 +35,40 @@ type RobotConfiguration struct {
 
 	// Arduino设备文件名
 	ArduinoDeviceID string `json:"arduinoDeviceID"`
+
 	// 摄像头云台水平舵机信号针脚编号
 	ServoHorizonPin string `json:"servoHorizonPin" default:"8"`
 	// 摄像头云台水平舵机名称
 	ServoHorizonName string `json:"servoHorizonName" default:"horizonServo"`
+
 	// 摄像头云台垂直舵机信号针脚编号
 	ServoVerticalPin string `json:"servoVerticalPin" default:"9"`
 	// 摄像头云台垂直舵机名称
 	ServoVerticalName string `json:"servoVerticalName" default:"verticalServo"`
+
 	// 动力系统左电机转速控制针脚编号
 	LeftMotorSpeedPin string `json:"leftMotorSpeedPin" default:"11"`
 	// 动力系统左电机正反转控制针脚编号
 	LeftMotorDirectionPin string `json:"leftMotorDirectionPin" default:"13"`
 	// 动力系统左电机名称
 	LeftMotorName string `json:"leftMotorName" default:"leftMotor"`
+
 	// 动力系统右电机转速控制针脚编号
 	RightMotorSpeedPin string `json:"rightMotorSpeedPin" default:"10"`
 	// 动力系统右电机正反转控制针脚编号
 	RightMotorDirectionPin string `json:"rightMotorDirectionPin" default:"12"`
 	// 动力系统右电机名称
 	RightMotorName string `json:"rightMotorName" default:"rightMotor"`
+
+	// 距离传感器输入针脚编号
+	DistanceTrigPin string `json:"distanceTrigPin" default:"6"`
+	// 距离传感器输出针脚编号
+	DistanceEchoPin string `json:"distanceEchoPin" default:"7"`
+	// 距离传感器名称
+	DistanceName string `json:"distanceName" default:"distance"`
+
+	// 距离传感器云台水平舵机信号针脚编号
+	DistanceServoHorizonPin string `json:"distanceServoHorizonPin" default:"5"`
+	// 距离传感器云台水平舵机名称
+	DistanceServoHorizonName string `json:"distanceServoHorizonName" default:"distanceServoHorizon"`
 }
