@@ -7,6 +7,11 @@ const (
 	ServoCentreAngle uint8 = 90
 )
 
+type Distance struct {
+	Angle    uint8
+	Distance float64
+}
+
 type Attitude struct {
 	Accelerometer i2c.ThreeDData
 	Gyroscope     i2c.ThreeDData

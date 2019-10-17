@@ -6,6 +6,7 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
+	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/drivers/gpio"
 	"gobot.io/x/gobot/platforms/firmata"
 	"time"
@@ -13,9 +14,10 @@ import (
 
 const (
 	distanceHCSR04WorkerID    = "distance-hcsr04-worker"
-	DistanceServoTopic        = "distance.servo"
-	DistanceServoEventHandler = "distance-servo-handler"
-	DistanceServoResultTopic  = "distance.servo.result"
+	DistanceBroadcastTopic    = "distance.broadcast"
+	DistanceQueryTopic        = "distance.query"
+	DistanceQueryEventHandler = "distance-query-handler"
+	DistanceQueryResultTopic  = "distance.query.result"
 )
 
 type DistanceHCSR04Worker struct {
@@ -38,8 +40,8 @@ func (d *DistanceHCSR04Worker) Start() {
 		logrus.Errorf("[DistanceHCSR04Worker] horizon servo move failed with err: %v", err)
 		return
 	}
-	d.bus.RegisterTopic(DistanceServoTopic)
-	d.bus.RegisterHandler(DistanceServoEventHandler, DistanceServoTopic, func(e *bus2.Event) {
+	d.bus.RegisterTopic(DistanceQueryTopic)
+	d.bus.RegisterHandler(DistanceQueryEventHandler, DistanceQueryTopic, func(e *bus2.Event) {
 		d.manualControl = true
 		defer func() {
 			d.manualControl = false
@@ -49,11 +51,15 @@ func (d *DistanceHCSR04Worker) Start() {
 		if err != nil {
 			return
 		}
-		d.bus.Emit(DistanceServoResultTopic, distance, "")
+		dis := Distance{
+			Angle:    d.currentHorizonAngle,
+			Distance: distance,
+		}
+		d.bus.Emit(DistanceQueryResultTopic, dis, "")
 	})
 
 	var offset uint8 = 5
-	for {
+	gobot.Every(10*time.Millisecond, func() {
 		if d.currentHorizonAngle < 0 || d.currentHorizonAngle > 180 {
 			offset = -offset
 		}
@@ -61,22 +67,25 @@ func (d *DistanceHCSR04Worker) Start() {
 		if err != nil {
 			return
 		}
-		logrus.Infof("angle: %d, distance: %.2f cm", d.currentHorizonAngle, distance)
-
-		time.Sleep(10 * time.Millisecond)
-	}
+		dis := Distance{
+			Angle:    d.currentHorizonAngle,
+			Distance: distance,
+		}
+		d.bus.Emit(DistanceBroadcastTopic, dis, "")
+	})
 }
 
 func (d *DistanceHCSR04Worker) measure(angle uint8) (float64, error) {
 	d.currentHorizonAngle = servoAngle(angle)
 	err := d.servoHorizon.Move(d.currentHorizonAngle)
 	if err != nil {
-		logrus.Errorf("[DistanceHCSR04Worker] %s servoHorizon.Move err: %v, angle: %d", DistanceServoEventHandler, err, d.currentHorizonAngle)
+		logrus.Errorf("[DistanceHCSR04Worker] %s servoHorizon.Move err: %v, angle: %d", DistanceQueryEventHandler, err, d.currentHorizonAngle)
 		return 0, err
 	}
+	time.Sleep(100 * time.Millisecond)
 	distance, err := d.sensor.Measure()
 	if err != nil {
-		logrus.Errorf("[DistanceHCSR04Worker] %s sensor.Measure err: %v, angle: %d", DistanceServoEventHandler, err, d.currentHorizonAngle)
+		logrus.Errorf("[DistanceHCSR04Worker] %s sensor.Measure err: %v, angle: %d", DistanceQueryEventHandler, err, d.currentHorizonAngle)
 		return 0, err
 	}
 	return distance, nil

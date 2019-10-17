@@ -13,12 +13,14 @@ import (
 
 const (
 	attitudeMPU6050WorkerID = "attitude-mpu6050-worker"
-	AttitudeTopic           = "attitude"
+	AttitudeBroadcastTopic  = "attitude.broadcast"
 )
 
 type AttitudeMPU6050Worker struct {
 	sensor *i2c.MPU6050Driver
 	bus    *bus.MessageBus
+
+	data Attitude
 }
 
 func NewAttitudeMPU6050Worker(robot *Robot, bus *bus.MessageBus, config *global.RobotConfiguration) *AttitudeMPU6050Worker {
@@ -42,6 +44,7 @@ func NewAttitudeMPU6050Worker(robot *Robot, bus *bus.MessageBus, config *global.
 	return &AttitudeMPU6050Worker{
 		sensor: sensor,
 		bus:    bus,
+		data:   Attitude{},
 	}
 }
 
@@ -57,12 +60,10 @@ func (a *AttitudeMPU6050Worker) Start() {
 			return
 		}
 		fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d", a.sensor.Accelerometer, a.sensor.Gyroscope, a.sensor.Temperature)
-		data := Attitude{
-			Accelerometer: a.sensor.Accelerometer,
-			Gyroscope:     a.sensor.Gyroscope,
-			Temperature:   a.sensor.Temperature,
-		}
-		a.bus.Emit(AttitudeTopic, data, "")
+		a.data.Accelerometer = a.sensor.Accelerometer
+		a.data.Gyroscope = a.sensor.Gyroscope
+		a.data.Temperature = a.sensor.Temperature
+		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
 	})
 }
 
