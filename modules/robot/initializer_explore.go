@@ -27,6 +27,9 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
 	robot.AddWorker(cameraWorker)
 
+	distanceWorker := NewDistanceHCSR04Worker(robot, messageBus, config)
+	robot.AddWorker(distanceWorker)
+
 	r := gobot.NewRobot("VehicleRobotExplore")
 	return r
 }

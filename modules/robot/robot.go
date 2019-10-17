@@ -166,7 +166,7 @@ func (r *Robot) handleAddressEvent(e *bus2.Event) {
 		}
 		robot.Work = func() {
 			for _, worker := range r.workers {
-				worker.Start()
+				go worker.Start()
 			}
 		}
 

@@ -14,3 +14,12 @@ func servoAngleChange(current uint8, offset float64) uint8 {
 	}
 	return current
 }
+
+func servoAngle(target uint8) uint8 {
+	if target < 0 {
+		target = 0
+	} else if target > ServoMaxAngle {
+		target = ServoMaxAngle
+	}
+	return target
+}

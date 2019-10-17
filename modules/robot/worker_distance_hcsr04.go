@@ -8,12 +8,14 @@ import (
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot/drivers/gpio"
 	"gobot.io/x/gobot/platforms/firmata"
+	"time"
 )
 
 const (
 	distanceHCSR04WorkerID    = "distance-hcsr04-worker"
 	DistanceServoTopic        = "distance.servo"
 	DistanceServoEventHandler = "distance-servo-handler"
+	DistanceServoResultTopic  = "distance.servo.result"
 )
 
 type DistanceHCSR04Worker struct {
@@ -42,7 +44,42 @@ func (d *DistanceHCSR04Worker) Start() {
 		defer func() {
 			d.manualControl = false
 		}()
+
+		distance, err := d.measure(e.Data.(uint8))
+		if err != nil {
+			return
+		}
+		d.bus.Emit(DistanceServoResultTopic, distance, "")
 	})
+
+	var offset uint8 = 5
+	for {
+		if d.currentHorizonAngle < 0 || d.currentHorizonAngle > 180 {
+			offset = -offset
+		}
+		distance, err := d.measure(d.currentHorizonAngle + offset)
+		if err != nil {
+			return
+		}
+		logrus.Infof("angle: %d, distance: %.2f cm", d.currentHorizonAngle, distance)
+
+		time.Sleep(10 * time.Millisecond)
+	}
+}
+
+func (d *DistanceHCSR04Worker) measure(angle uint8) (float64, error) {
+	d.currentHorizonAngle = servoAngle(angle)
+	err := d.servoHorizon.Move(d.currentHorizonAngle)
+	if err != nil {
+		logrus.Errorf("[DistanceHCSR04Worker] %s servoHorizon.Move err: %v, angle: %d", DistanceServoEventHandler, err, d.currentHorizonAngle)
+		return 0, err
+	}
+	distance, err := d.sensor.Measure()
+	if err != nil {
+		logrus.Errorf("[DistanceHCSR04Worker] %s sensor.Measure err: %v, angle: %d", DistanceServoEventHandler, err, d.currentHorizonAngle)
+		return 0, err
+	}
+	return distance, nil
 }
 
 func (d *DistanceHCSR04Worker) Restart() error {

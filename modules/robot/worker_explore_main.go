@@ -26,8 +26,9 @@ type ExploreMainWorker struct {
 
 func NewExploreMainWorker(robot *Robot, config *global.RobotConfiguration, bus *bus.MessageBus, cli *client.RobotClient) *ExploreMainWorker {
 	return &ExploreMainWorker{
-		bus: bus,
-		cli: cli,
+		config: config,
+		bus:    bus,
+		cli:    cli,
 	}
 }
 
