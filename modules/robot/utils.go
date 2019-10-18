@@ -15,6 +15,7 @@ type Distance struct {
 type Attitude struct {
 	Accelerometer i2c.ThreeDData
 	Gyroscope     i2c.ThreeDData
+	Compass       i2c.ThreeDData
 	Temperature   int16
 }
 

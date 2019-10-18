@@ -30,7 +30,7 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	distanceWorker := NewDistanceHCSR04Worker(robot, messageBus, config)
 	robot.AddWorker(distanceWorker)
 
-	attitudeWorker := NewAttitudeMPU6050Worker(robot, messageBus, config)
+	attitudeWorker := NewAttitudeGY85Worker(robot, messageBus, config)
 	robot.AddWorker(attitudeWorker)
 
 	r := gobot.NewRobot("VehicleRobotExplore")
