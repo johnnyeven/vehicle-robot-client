@@ -1,7 +1,5 @@
 package robot
 
-import "gobot.io/x/gobot/drivers/i2c"
-
 const (
 	ServoMaxAngle    uint8 = 180
 	ServoCentreAngle uint8 = 90
@@ -13,10 +11,22 @@ type Distance struct {
 }
 
 type Attitude struct {
-	Accelerometer i2c.ThreeDData
-	Gyroscope     i2c.ThreeDData
-	Compass       i2c.ThreeDData
-	Temperature   int16
+	// 加速度
+	Accelerometer ThreeDDataCalibration
+	// 陀螺仪
+	Gyroscope ThreeDDataCalibration
+	// 磁力计
+	Compass ThreeDDataCalibration
+	// 欧拉角
+	EulerAngle ThreeDDataCalibration
+	// 温度
+	Temperature float64
+}
+
+type ThreeDDataCalibration struct {
+	X float64
+	Y float64
+	Z float64
 }
 
 func servoAngleChange(current uint8, offset float64) uint8 {

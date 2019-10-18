@@ -8,11 +8,14 @@ import (
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/firmata"
+	"math"
 	"time"
 )
 
 const (
-	attitudeGY85WorkerID = "attitude-gy85-worker"
+	attitudeGY85WorkerID   = "attitude-gy85-worker"
+	attitudeGravityRectify = math.MaxInt16 / 2   // 加速度计分辨率为 2 m/2s
+	attitudeGyroRectify    = math.MaxInt16 / 250 // 陀螺仪分辨率为 250 degrees/sec
 )
 
 type AttitudeGY85Worker struct {
@@ -21,7 +24,9 @@ type AttitudeGY85Worker struct {
 	compassSensor *drivers.HMC5883Driver
 	bus           *bus.MessageBus
 
-	data Attitude
+	calibrationTimes  int
+	calibrationOffset Attitude
+	data              Attitude
 }
 
 func NewAttitudeGY85Worker(robot *Robot, bus *bus.MessageBus, config *global.RobotConfiguration) *AttitudeGY85Worker {
@@ -47,11 +52,12 @@ func NewAttitudeGY85Worker(robot *Robot, bus *bus.MessageBus, config *global.Rob
 	robot.AddDevice(accSensor, gyroSensor, compassSensor)
 
 	return &AttitudeGY85Worker{
-		accSensor:     accSensor,
-		gyroSensor:    gyroSensor,
-		compassSensor: compassSensor,
-		bus:           bus,
-		data:          Attitude{},
+		accSensor:         accSensor,
+		gyroSensor:        gyroSensor,
+		compassSensor:     compassSensor,
+		bus:               bus,
+		calibrationOffset: Attitude{},
+		data:              Attitude{},
 	}
 }
 
@@ -60,6 +66,7 @@ func (a *AttitudeGY85Worker) WorkerID() string {
 }
 
 func (a *AttitudeGY85Worker) Start() {
+	a.calibration()
 	gobot.Every(10*time.Millisecond, func() {
 		err := a.accSensor.GetData()
 		if err != nil {
@@ -77,12 +84,91 @@ func (a *AttitudeGY85Worker) Start() {
 			return
 		}
 		fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d, Compass: %v", a.accSensor.Accelerometer, a.gyroSensor.Gyroscope, a.gyroSensor.Temperature, a.compassSensor.Compass)
-		a.data.Accelerometer = a.accSensor.Accelerometer
-		a.data.Gyroscope = a.gyroSensor.Gyroscope
-		a.data.Temperature = a.gyroSensor.Temperature
-		a.data.Compass = a.compassSensor.Compass
+		a.data.Accelerometer.X = float64(a.accSensor.Accelerometer.X)
+		a.data.Accelerometer.Y = float64(a.accSensor.Accelerometer.Y)
+		a.data.Accelerometer.Z = float64(a.accSensor.Accelerometer.Z)
+
+		a.data.Gyroscope.X = float64(a.gyroSensor.Gyroscope.X)
+		a.data.Gyroscope.Y = float64(a.gyroSensor.Gyroscope.Y)
+		a.data.Gyroscope.Z = float64(a.gyroSensor.Gyroscope.Z)
+
+		a.data.Temperature = float64(a.gyroSensor.Temperature)
+
+		a.data.Compass.X = float64(a.compassSensor.Compass.X)
+		a.data.Compass.Y = float64(a.compassSensor.Compass.Y)
+		a.data.Compass.Z = float64(a.compassSensor.Compass.Z)
+
+		a.rectify()
 		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
 	})
+}
+
+// 数据校准
+func (a *AttitudeGY85Worker) calibration() error {
+	logrus.Info("[AttitudeGY85Worker] calibration...")
+	defer func() {
+		logrus.Infof("[AttitudeGY85Worker] calibration complete, offset: %+v", a.calibrationOffset)
+	}()
+	totalCalibration := Attitude{
+		Accelerometer: ThreeDDataCalibration{},
+		Gyroscope:     ThreeDDataCalibration{},
+		Compass:       ThreeDDataCalibration{},
+		Temperature:   0,
+	}
+	for i := 0; i < a.calibrationTimes; i++ {
+		err := a.accSensor.GetData()
+		if err != nil {
+			logrus.Errorf("[AttitudeGY85Worker] accSensor.GetData() err: %v", err)
+			return err
+		}
+		err = a.gyroSensor.GetData()
+		if err != nil {
+			logrus.Errorf("[AttitudeGY85Worker] gyroSensor.GetData() err: %v", err)
+			return err
+		}
+		err = a.compassSensor.GetData()
+		if err != nil {
+			logrus.Errorf("[AttitudeGY85Worker] compassSensor.GetData() err: %v", err)
+			return err
+		}
+		totalCalibration.Accelerometer.X += float64(a.accSensor.Accelerometer.X)
+		totalCalibration.Accelerometer.Y += float64(a.accSensor.Accelerometer.Y)
+		totalCalibration.Accelerometer.Z += float64(a.accSensor.Accelerometer.Z)
+
+		totalCalibration.Gyroscope.X += float64(a.gyroSensor.Gyroscope.X)
+		totalCalibration.Gyroscope.Y += float64(a.gyroSensor.Gyroscope.Y)
+		totalCalibration.Gyroscope.Z += float64(a.gyroSensor.Gyroscope.Z)
+
+		totalCalibration.Temperature += float64(a.gyroSensor.Temperature)
+
+		totalCalibration.Compass.X += float64(a.compassSensor.Compass.X)
+		totalCalibration.Compass.Y += float64(a.compassSensor.Compass.Y)
+		totalCalibration.Compass.Z += float64(a.compassSensor.Compass.Z)
+	}
+
+	a.calibrationOffset.Accelerometer.X = totalCalibration.Accelerometer.X / float64(a.calibrationTimes)
+	a.calibrationOffset.Accelerometer.Y = totalCalibration.Accelerometer.Y / float64(a.calibrationTimes)
+	a.calibrationOffset.Accelerometer.Z = totalCalibration.Accelerometer.Z/float64(a.calibrationTimes) + attitudeGravityRectify // 需要抵消初始垂直向下的地球重力加速度，因为传感器感知范围为2g，故最大值除以2为1g
+
+	a.calibrationOffset.Gyroscope.X = totalCalibration.Gyroscope.X / float64(a.calibrationTimes)
+	a.calibrationOffset.Gyroscope.Y = totalCalibration.Gyroscope.Y / float64(a.calibrationTimes)
+	a.calibrationOffset.Gyroscope.Z = totalCalibration.Gyroscope.Z / float64(a.calibrationTimes)
+
+	return nil
+}
+
+// 重力加速度转换为N * 1g，角度转换为N * 1degress/sec
+// 计算欧拉角
+func (a *AttitudeGY85Worker) rectify() {
+	a.data.Accelerometer.X = (a.data.Accelerometer.X - a.calibrationOffset.Accelerometer.X) / attitudeGravityRectify
+	a.data.Accelerometer.Y = (a.data.Accelerometer.Y - a.calibrationOffset.Accelerometer.Y) / attitudeGravityRectify
+	a.data.Accelerometer.Z = (a.data.Accelerometer.Z - a.calibrationOffset.Accelerometer.Z) / attitudeGravityRectify
+
+	a.data.Temperature = a.data.Temperature/340.0 + 36.53
+
+	a.data.Gyroscope.X = (a.data.Gyroscope.X - a.calibrationOffset.Gyroscope.X) / attitudeGyroRectify
+	a.data.Gyroscope.Y = (a.data.Gyroscope.Y - a.calibrationOffset.Gyroscope.Y) / attitudeGyroRectify
+	a.data.Gyroscope.Z = (a.data.Gyroscope.Z - a.calibrationOffset.Gyroscope.Z) / attitudeGyroRectify
 }
 
 func (a *AttitudeGY85Worker) Restart() error {

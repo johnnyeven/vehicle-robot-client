@@ -60,9 +60,16 @@ func (a *AttitudeMPU6050Worker) Start() {
 			return
 		}
 		fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d", a.sensor.Accelerometer, a.sensor.Gyroscope, a.sensor.Temperature)
-		a.data.Accelerometer = a.sensor.Accelerometer
-		a.data.Gyroscope = a.sensor.Gyroscope
-		a.data.Temperature = a.sensor.Temperature
+		a.data.Accelerometer.X = float64(a.sensor.Accelerometer.X)
+		a.data.Accelerometer.Y = float64(a.sensor.Accelerometer.Y)
+		a.data.Accelerometer.Z = float64(a.sensor.Accelerometer.Z)
+
+		a.data.Gyroscope.X = float64(a.sensor.Gyroscope.X)
+		a.data.Gyroscope.Y = float64(a.sensor.Gyroscope.Y)
+		a.data.Gyroscope.Z = float64(a.sensor.Gyroscope.Z)
+
+		a.data.Temperature = float64(a.sensor.Temperature)
+
 		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
 	})
 }

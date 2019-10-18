@@ -24,13 +24,13 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
 	robot.AddWorker(cameraHolderWorker)
 
-	// 马达控制器
-	powerControlWorker := NewPowerWorker(robot, messageBus, config)
-	robot.AddWorker(powerControlWorker)
-
 	// 摄像头
 	cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
 	robot.AddWorker(cameraWorker)
+
+	// 马达控制器
+	powerControlWorker := NewPowerWorker(robot, messageBus, config)
+	robot.AddWorker(powerControlWorker)
 
 	// 超声波测距
 	distanceWorker := NewDistanceHCSR04Worker(robot, messageBus, config)
