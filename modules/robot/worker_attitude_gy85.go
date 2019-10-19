@@ -107,6 +107,7 @@ func (a *AttitudeGY85Worker) Start() {
 
 		a.rectify()
 		a.calcAngle()
+		a.data.EulerAngle.Z = a.compassSensor.Heading()
 		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
 	})
 }
