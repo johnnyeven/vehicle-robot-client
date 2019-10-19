@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+const (
+	attitudeGravityRectify = 256    // 根据芯片手册查询加速度计比例因子
+	attitudeGyroRectify    = 14.375 // 根据芯片手册查询陀螺仪比例因子
+)
+
 type AttitudeWorker struct {
 	calibrationOffset Attitude
 	data              Attitude

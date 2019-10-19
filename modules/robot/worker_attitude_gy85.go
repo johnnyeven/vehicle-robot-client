@@ -9,14 +9,11 @@ import (
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/firmata"
-	"math"
 	"time"
 )
 
 const (
-	attitudeGY85WorkerID   = "attitude-gy85-worker"
-	attitudeGravityRectify = math.MaxInt16 / 2   // 加速度计分辨率为 2 m/2s
-	attitudeGyroRectify    = math.MaxInt16 / 250 // 陀螺仪分辨率为 250 degrees/sec
+	attitudeGY85WorkerID = "attitude-gy85-worker"
 )
 
 type AttitudeGY85Worker struct {
