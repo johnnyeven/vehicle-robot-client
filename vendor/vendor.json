@@ -728,6 +728,12 @@
 			"revisionTime": "2019-08-30T17:41:32Z"
 		},
 		{
+			"checksumSHA1": "fMbKpRYN5MgU6KnuKl9mAQNcjwc=",
+			"path": "github.com/shantanubhadoria/go-kalmanfilter/kalmanfilter",
+			"revision": "4fc165e480149f56327e0f8506d6c2d2dff00fa3",
+			"revisionTime": "2018-03-08T03:27:27Z"
+		},
+		{
 			"checksumSHA1": "bQ7M3uZGseGPclqKZBV14QsOk1w=",
 			"path": "github.com/sigurn/crc8",
 			"revision": "e55481d6f45c5a8f040343bace9013571dae103e",
