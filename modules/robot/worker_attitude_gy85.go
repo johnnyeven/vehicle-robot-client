@@ -5,6 +5,7 @@ import (
 	"github.com/johnnyeven/libtools/bus"
 	"github.com/johnnyeven/robot-library/drivers"
 	"github.com/johnnyeven/vehicle-robot-client/global"
+	"github.com/shantanubhadoria/go-kalmanfilter/kalmanfilter"
 	"github.com/sirupsen/logrus"
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/firmata"
@@ -27,6 +28,10 @@ type AttitudeGY85Worker struct {
 	calibrationTimes  int
 	calibrationOffset Attitude
 	data              Attitude
+
+	lastTime    time.Time
+	kalmanRoll  *kalmanfilter.FilterData
+	kalmanPitch *kalmanfilter.FilterData
 }
 
 func NewAttitudeGY85Worker(robot *Robot, bus *bus.MessageBus, config *global.RobotConfiguration) *AttitudeGY85Worker {
@@ -58,6 +63,8 @@ func NewAttitudeGY85Worker(robot *Robot, bus *bus.MessageBus, config *global.Rob
 		bus:               bus,
 		calibrationOffset: Attitude{},
 		data:              Attitude{},
+		kalmanRoll:        &kalmanfilter.FilterData{},
+		kalmanPitch:       &kalmanfilter.FilterData{},
 	}
 }
 
@@ -68,6 +75,7 @@ func (a *AttitudeGY85Worker) WorkerID() string {
 func (a *AttitudeGY85Worker) Start() {
 	a.calibration()
 	gobot.Every(10*time.Millisecond, func() {
+		a.lastTime = time.Now()
 		err := a.accSensor.GetData()
 		if err != nil {
 			logrus.Errorf("[AttitudeGY85Worker] accSensor.GetData() err: %v", err)
@@ -99,6 +107,7 @@ func (a *AttitudeGY85Worker) Start() {
 		a.data.Compass.Z = float64(a.compassSensor.Compass.Z)
 
 		a.rectify()
+		a.calcAngle()
 		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
 	})
 }
@@ -169,6 +178,36 @@ func (a *AttitudeGY85Worker) rectify() {
 	a.data.Gyroscope.X = (a.data.Gyroscope.X - a.calibrationOffset.Gyroscope.X) / attitudeGyroRectify
 	a.data.Gyroscope.Y = (a.data.Gyroscope.Y - a.calibrationOffset.Gyroscope.Y) / attitudeGyroRectify
 	a.data.Gyroscope.Z = (a.data.Gyroscope.Z - a.calibrationOffset.Gyroscope.Z) / attitudeGyroRectify
+}
+
+func (a *AttitudeGY85Worker) calcAngle() {
+	// 加速度向量模长
+	accNormal := math.Sqrt(a.data.Accelerometer.X*a.data.Accelerometer.X + a.data.Accelerometer.Y*a.data.Accelerometer.Y + a.data.Accelerometer.Z*a.data.Accelerometer.Z)
+
+	// 计算滚转角X
+	rollAngle := a.getAngle(a.data.Accelerometer.X, a.data.Accelerometer.Z, accNormal)
+	if a.data.Accelerometer.Y > 0 {
+		rollAngle = -rollAngle
+	}
+
+	// 计算俯仰角Y
+	pitchAngle := a.getAngle(a.data.Accelerometer.Y, a.data.Accelerometer.Z, accNormal)
+	if a.data.Accelerometer.X < 0 {
+		pitchAngle = -pitchAngle
+	}
+
+	currentTime := time.Now()
+	duration := currentTime.Sub(a.lastTime)
+	rollAngle = a.kalmanRoll.Update(rollAngle, a.data.Gyroscope.Y, float64(duration/time.Second))
+	pitchAngle = a.kalmanPitch.Update(pitchAngle, a.data.Gyroscope.Z, float64(duration/time.Second))
+
+	a.data.EulerAngle.X = rollAngle
+	a.data.EulerAngle.Y = pitchAngle
+}
+
+func (a *AttitudeGY85Worker) getAngle(x, y float64, normal float64) float64 {
+	normalXY := math.Sqrt(x*x + y*y)
+	return math.Acos(normalXY/normal) * 180 / math.Pi
 }
 
 func (a *AttitudeGY85Worker) Restart() error {
