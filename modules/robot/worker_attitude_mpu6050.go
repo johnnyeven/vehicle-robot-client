@@ -9,19 +9,22 @@ import (
 	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/drivers/i2c"
 	"gobot.io/x/gobot/platforms/firmata"
+	"math"
 	"time"
 )
 
 const (
 	attitudeMPU6050WorkerID = "attitude-mpu6050-worker"
 	AttitudeBroadcastTopic  = "attitude.broadcast"
+	attitudeGravityRectify  = math.MaxInt16 / 2
 )
 
 type AttitudeMPU6050Worker struct {
 	sensor *i2c.MPU6050Driver
 	bus    *bus.MessageBus
 
-	calibrationTimes int
+	calibrationOffset Attitude
+	calibrationTimes  int
 	AttitudeWorker
 }
 
@@ -44,14 +47,14 @@ func NewAttitudeMPU6050Worker(robot *Robot, bus *bus.MessageBus, config *global.
 	robot.AddDevice(sensor)
 
 	return &AttitudeMPU6050Worker{
-		sensor:           sensor,
-		bus:              bus,
-		calibrationTimes: 1000,
+		sensor:            sensor,
+		bus:               bus,
+		calibrationTimes:  1000,
+		calibrationOffset: Attitude{},
 		AttitudeWorker: AttitudeWorker{
-			calibrationOffset: Attitude{},
-			data:              Attitude{},
-			kalmanRoll:        &kalmanfilter.FilterData{},
-			kalmanPitch:       &kalmanfilter.FilterData{},
+			data:        Attitude{},
+			kalmanRoll:  &kalmanfilter.FilterData{},
+			kalmanPitch: &kalmanfilter.FilterData{},
 		},
 	}
 }

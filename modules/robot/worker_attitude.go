@@ -1,19 +1,14 @@
 package robot
 
 import (
+	"github.com/johnnyeven/robot-library/drivers"
 	"github.com/shantanubhadoria/go-kalmanfilter/kalmanfilter"
 	"math"
 	"time"
 )
 
-const (
-	attitudeGravityRectify = 256    // 根据芯片手册查询加速度计比例因子
-	attitudeGyroRectify    = 14.375 // 根据芯片手册查询陀螺仪比例因子
-)
-
 type AttitudeWorker struct {
-	calibrationOffset Attitude
-	data              Attitude
+	data Attitude
 
 	lastTime    time.Time
 	kalmanRoll  *kalmanfilter.FilterData
@@ -23,15 +18,15 @@ type AttitudeWorker struct {
 // 重力加速度转换为N * 1g，角度转换为N * 1degress/sec
 // 计算欧拉角
 func (a *AttitudeWorker) rectify() {
-	a.data.Accelerometer.X = (a.data.Accelerometer.X - a.calibrationOffset.Accelerometer.X) / attitudeGravityRectify
-	a.data.Accelerometer.Y = (a.data.Accelerometer.Y - a.calibrationOffset.Accelerometer.Y) / attitudeGravityRectify
-	a.data.Accelerometer.Z = (a.data.Accelerometer.Z - a.calibrationOffset.Accelerometer.Z) / attitudeGravityRectify
+	a.data.Accelerometer.X = a.data.Accelerometer.X / drivers.Adxl345LSB
+	a.data.Accelerometer.Y = a.data.Accelerometer.Y / drivers.Adxl345LSB
+	a.data.Accelerometer.Z = a.data.Accelerometer.Z / drivers.Adxl345LSB
 
 	a.data.Temperature = a.data.Temperature/340.0 + 36.53
 
-	a.data.Gyroscope.X = (a.data.Gyroscope.X - a.calibrationOffset.Gyroscope.X) / attitudeGyroRectify
-	a.data.Gyroscope.Y = (a.data.Gyroscope.Y - a.calibrationOffset.Gyroscope.Y) / attitudeGyroRectify
-	a.data.Gyroscope.Z = (a.data.Gyroscope.Z - a.calibrationOffset.Gyroscope.Z) / attitudeGyroRectify
+	a.data.Gyroscope.X = a.data.Gyroscope.X / drivers.ITG3200LSB
+	a.data.Gyroscope.Y = a.data.Gyroscope.Y / drivers.ITG3200LSB
+	a.data.Gyroscope.Z = a.data.Gyroscope.Z / drivers.ITG3200LSB
 }
 
 func (a *AttitudeWorker) calcAngle() {

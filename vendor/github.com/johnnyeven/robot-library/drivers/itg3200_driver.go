@@ -13,15 +13,17 @@ const (
 	ITG3200ConfSMPLAddress = 0x15
 	ITG3200ConfSMPLValue   = 0x07 // 每秒采样次数 7+1 次
 	ITG3200ConfDLPFAddress = 0x16
-	ITG3200ConfDLPFValue   = 0x1E // 000 11 110 FS_SEL=3 DLPF_CFG=6
+	ITG3200ConfDLPFValue   = 0x1E   // 000 11 110 FS_SEL=3 DLPF_CFG=6
+	ITG3200LSB             = 14.375 // 根据芯片手册查询陀螺仪比例因子
 )
 
 type ITG3200Driver struct {
-	name        string
-	connector   i2c.Connector
-	connection  i2c.Connection
-	Gyroscope   i2c.ThreeDData
-	Temperature int16
+	name              string
+	connector         i2c.Connector
+	connection        i2c.Connection
+	Gyroscope         ThreeDDataCalibration
+	offsetCalibration ThreeDDataCalibration
+	Temperature       int16
 	i2c.Config
 	gobot.Eventer
 }
@@ -85,22 +87,54 @@ func (d *ITG3200Driver) initialize() (err error) {
 	return nil
 }
 
+func (d *ITG3200Driver) Calibration(times int) {
+	var xTotal, yTotal, zTotal int64
+	for i := 0; i < times; i++ {
+		originGyro, _, err := d.GetRawData()
+		if err != nil {
+			continue
+		}
+		xTotal += int64(originGyro.X)
+		yTotal += int64(originGyro.Y)
+		zTotal += int64(originGyro.Z)
+	}
+
+	d.offsetCalibration.X = float64(xTotal) / float64(times)
+	d.offsetCalibration.Y = float64(yTotal) / float64(times)
+	d.offsetCalibration.Z = float64(zTotal) / float64(times)
+}
+
 // GetData fetches the latest data from the ITG3200
-func (h *ITG3200Driver) GetData() (err error) {
-	if _, err = h.connection.Write([]byte{ITG3200DataAddress}); err != nil {
+func (d *ITG3200Driver) GetRawData() (originGyro i2c.ThreeDData, originTemp int16, err error) {
+	if _, err = d.connection.Write([]byte{ITG3200DataAddress}); err != nil {
 		return
 	}
 
 	data := make([]byte, 8)
-	_, err = h.connection.Read(data)
+	_, err = d.connection.Read(data)
 	if err != nil {
 		return
 	}
 
 	buf := bytes.NewBuffer(data)
-	err = binary.Read(buf, binary.BigEndian, &h.Temperature)
+	err = binary.Read(buf, binary.BigEndian, &originTemp)
 	if err != nil {
 		return
 	}
-	return binary.Read(buf, binary.BigEndian, &h.Gyroscope)
+	err = binary.Read(buf, binary.BigEndian, &originGyro)
+	return
+}
+
+func (d *ITG3200Driver) GetData() (err error) {
+	originGyro, originTemp, err := d.GetRawData()
+	if err != nil {
+		return
+	}
+
+	d.Temperature = originTemp
+	d.Gyroscope.X = float64(originGyro.X) - d.offsetCalibration.X
+	d.Gyroscope.Y = float64(originGyro.Y) - d.offsetCalibration.Y
+	d.Gyroscope.Z = float64(originGyro.Z) - d.offsetCalibration.Z
+
+	return
 }
