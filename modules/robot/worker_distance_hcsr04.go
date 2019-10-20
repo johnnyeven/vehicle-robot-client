@@ -1,6 +1,7 @@
 package robot
 
 import (
+	"fmt"
 	"github.com/johnnyeven/libtools/bus"
 	"github.com/johnnyeven/robot-library/drivers"
 	"github.com/johnnyeven/vehicle-robot-client/global"
@@ -60,10 +61,11 @@ func (d *DistanceHCSR04Worker) Start() {
 
 	var offset uint8 = 5
 	gobot.Every(10*time.Millisecond, func() {
-		if d.currentHorizonAngle < 0 || d.currentHorizonAngle > 180 {
+		if d.currentHorizonAngle <= 0 || d.currentHorizonAngle >= 180 {
 			offset = -offset
 		}
-		distance, err := d.measure(d.currentHorizonAngle + offset)
+		d.currentHorizonAngle += offset
+		distance, err := d.measure(d.currentHorizonAngle)
 		if err != nil {
 			return
 		}
@@ -71,6 +73,7 @@ func (d *DistanceHCSR04Worker) Start() {
 			Angle:    d.currentHorizonAngle,
 			Distance: distance,
 		}
+		fmt.Printf("\rangle: %d deg, distance: %.2f cm", dis.Angle, dis.Distance)
 		d.bus.Emit(DistanceBroadcastTopic, dis, "")
 	})
 }

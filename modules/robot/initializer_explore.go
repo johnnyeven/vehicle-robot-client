@@ -17,28 +17,30 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	logrus.Info("initial explore robot...")
 
 	// 主业务逻辑控制器
-	mainWorker := NewExploreMainWorker(robot, config, messageBus, robotClient)
-	robot.AddWorker(mainWorker)
+	//mainWorker := NewExploreMainWorker(robot, config, messageBus, robotClient)
+	//robot.AddWorker(mainWorker)
 
 	// 摄像头云台
-	cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
-	robot.AddWorker(cameraHolderWorker)
+	//cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
+	//robot.AddWorker(cameraHolderWorker)
 
 	// 摄像头
-	cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
-	robot.AddWorker(cameraWorker)
+	//cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
+	//robot.AddWorker(cameraWorker)
 
 	// 马达控制器
-	powerControlWorker := NewPowerWorker(robot, messageBus, config)
-	robot.AddWorker(powerControlWorker)
+	//powerControlWorker := NewPowerWorker(robot, messageBus, config)
+	//robot.AddWorker(powerControlWorker)
 
 	// 超声波测距
-	distanceWorker := NewDistanceHCSR04Worker(robot, messageBus, config)
-	robot.AddWorker(distanceWorker)
+	//distanceWorker := NewDistanceHCSR04Worker(robot, messageBus, config)
+	//robot.AddWorker(distanceWorker)
 
 	// 姿态控制器
-	attitudeWorker := NewAttitudeGY85Worker(robot, messageBus, config)
+	attitudeWorker := NewAttitudeMPU6050Worker(robot, messageBus, config)
 	robot.AddWorker(attitudeWorker)
+	// attitudeWorker := NewAttitudeGY85Worker(robot, messageBus, config)
+	//robot.AddWorker(attitudeWorker)
 
 	r := gobot.NewRobot("VehicleRobotExplore")
 	return r
