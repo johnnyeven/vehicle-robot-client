@@ -52,7 +52,7 @@ func NewAttitudeMPU6050Worker(robot *Robot, bus *bus.MessageBus, config *global.
 		calibrationTimes:  1000,
 		calibrationOffset: Attitude{},
 		AttitudeWorker: AttitudeWorker{
-			data:        Attitude{},
+			Data:        Attitude{},
 			kalmanRoll:  &kalmanfilter.FilterData{},
 			kalmanPitch: &kalmanfilter.FilterData{},
 		},
@@ -72,19 +72,19 @@ func (a *AttitudeMPU6050Worker) Start() {
 			return
 		}
 		fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d", a.sensor.Accelerometer, a.sensor.Gyroscope, a.sensor.Temperature)
-		a.data.Accelerometer.X = float64(a.sensor.Accelerometer.X)
-		a.data.Accelerometer.Y = float64(a.sensor.Accelerometer.Y)
-		a.data.Accelerometer.Z = float64(a.sensor.Accelerometer.Z)
+		a.Data.Accelerometer.X = float64(a.sensor.Accelerometer.X)
+		a.Data.Accelerometer.Y = float64(a.sensor.Accelerometer.Y)
+		a.Data.Accelerometer.Z = float64(a.sensor.Accelerometer.Z)
 
-		a.data.Gyroscope.X = float64(a.sensor.Gyroscope.X)
-		a.data.Gyroscope.Y = float64(a.sensor.Gyroscope.Y)
-		a.data.Gyroscope.Z = float64(a.sensor.Gyroscope.Z)
+		a.Data.Gyroscope.X = float64(a.sensor.Gyroscope.X)
+		a.Data.Gyroscope.Y = float64(a.sensor.Gyroscope.Y)
+		a.Data.Gyroscope.Z = float64(a.sensor.Gyroscope.Z)
 
-		a.data.Temperature = float64(a.sensor.Temperature)
+		a.Data.Temperature = float64(a.sensor.Temperature)
 
 		a.rectify()
 		a.calcAngle()
-		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
+		a.bus.Emit(AttitudeBroadcastTopic, a.Data, "")
 	})
 }
 

@@ -56,7 +56,7 @@ func NewAttitudeGY85Worker(robot *Robot, bus *bus.MessageBus, config *global.Rob
 		bus:              bus,
 		calibrationTimes: 1000,
 		AttitudeWorker: AttitudeWorker{
-			data:        Attitude{},
+			Data:        Attitude{},
 			kalmanRoll:  &kalmanfilter.FilterData{},
 			kalmanPitch: &kalmanfilter.FilterData{},
 		},
@@ -91,24 +91,24 @@ func (a *AttitudeGY85Worker) Start() {
 			return
 		}
 		fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d, Compass: %v", a.accSensor.Accelerometer, a.gyroSensor.Gyroscope, a.gyroSensor.Temperature, a.compassSensor.Compass)
-		a.data.Accelerometer.X = a.accSensor.Accelerometer.X
-		a.data.Accelerometer.Y = a.accSensor.Accelerometer.Y
-		a.data.Accelerometer.Z = a.accSensor.Accelerometer.Z
+		a.Data.Accelerometer.X = a.accSensor.Accelerometer.X
+		a.Data.Accelerometer.Y = a.accSensor.Accelerometer.Y
+		a.Data.Accelerometer.Z = a.accSensor.Accelerometer.Z
 
-		a.data.Gyroscope.X = a.gyroSensor.Gyroscope.X
-		a.data.Gyroscope.Y = a.gyroSensor.Gyroscope.Y
-		a.data.Gyroscope.Z = a.gyroSensor.Gyroscope.Z
+		a.Data.Gyroscope.X = a.gyroSensor.Gyroscope.X
+		a.Data.Gyroscope.Y = a.gyroSensor.Gyroscope.Y
+		a.Data.Gyroscope.Z = a.gyroSensor.Gyroscope.Z
 
-		a.data.Temperature = float64(a.gyroSensor.Temperature)
+		a.Data.Temperature = float64(a.gyroSensor.Temperature)
 
-		a.data.Compass.X = a.compassSensor.Compass.X
-		a.data.Compass.Y = a.compassSensor.Compass.Y
-		a.data.Compass.Z = a.compassSensor.Compass.Z
+		a.Data.Compass.X = a.compassSensor.Compass.X
+		a.Data.Compass.Y = a.compassSensor.Compass.Y
+		a.Data.Compass.Z = a.compassSensor.Compass.Z
 
 		a.rectify()
 		a.calcAngle()
-		a.data.EulerAngle.Z = a.compassSensor.Heading()
-		a.bus.Emit(AttitudeBroadcastTopic, a.data, "")
+		a.Data.EulerAngle.Z = a.compassSensor.Heading()
+		a.bus.Emit(AttitudeBroadcastTopic, a.Data, "")
 	})
 }
 
