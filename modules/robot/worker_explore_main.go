@@ -6,7 +6,6 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/client"
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/johnnyeven/vehicle-robot-client/modules"
-	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
 	"image"
 	"image/jpeg"
@@ -14,21 +13,50 @@ import (
 
 const (
 	exploreMainWorkerID             = "explore-main-worker"
-	cameraCaptureResultTopic        = "camera.capture.result"
-	cameraCaptureResultEventHandler = "camera-capture-result-handler"
+	cameraCaptureResultTopic        = "camera.Capture.result"
+	cameraCaptureResultEventHandler = "camera-Capture-result-handler"
 )
 
 type ExploreMainWorker struct {
 	config *global.RobotConfiguration
 	bus    *bus.MessageBus
 	cli    *client.RobotClient
+	quit   chan struct{}
+
+	cameraWorker   *CameraExploreWorker
+	attitudeWorker *AttitudeGY85Worker
+	distanceWorker *DistanceHCSR04Worker
+	powerWorker    *PowerWorker
 }
 
 func NewExploreMainWorker(robot *Robot, config *global.RobotConfiguration, bus *bus.MessageBus, cli *client.RobotClient) *ExploreMainWorker {
+	cameraWorker, ok := robot.GetWorker(cameraExploreWorkerID).(*CameraExploreWorker)
+	if !ok {
+		logrus.Panicf("[ExploreMainWorker] robot.GetWorker(cameraExploreWorkerID).(*CameraExploreWorker) error")
+	}
+	attitudeWorker, ok := robot.GetWorker(attitudeGY85WorkerID).(*AttitudeGY85Worker)
+	if !ok {
+		logrus.Panicf("[ExploreMainWorker] robot.GetWorker(attitudeGY85WorkerID).(*AttitudeGY85Worker) error")
+	}
+	distanceWorker, ok := robot.GetWorker(distanceHCSR04WorkerID).(*DistanceHCSR04Worker)
+	if !ok {
+		logrus.Panicf("[ExploreMainWorker] robot.GetWorker(distanceHCSR04WorkerID).(*DistanceHCSR04Worker) error")
+	}
+	powerWorker, ok := robot.GetWorker(powerWorkerID).(*PowerWorker)
+	if !ok {
+		logrus.Panicf("[ExploreMainWorker] robot.GetWorker(powerWorkerID).(*PowerWorker) error")
+	}
+
 	return &ExploreMainWorker{
 		config: config,
 		bus:    bus,
 		cli:    cli,
+		quit:   make(chan struct{}),
+
+		cameraWorker:   cameraWorker,
+		attitudeWorker: attitudeWorker,
+		distanceWorker: distanceWorker,
+		powerWorker:    powerWorker,
 	}
 }
 
@@ -37,23 +65,31 @@ func (e *ExploreMainWorker) WorkerID() string {
 }
 
 func (e *ExploreMainWorker) Start() {
-	e.bus.RegisterTopic(cameraCaptureResultTopic)
-	e.bus.RegisterHandler(cameraCaptureResultEventHandler, cameraCaptureResultTopic, func(evt *bus2.Event) {
-		sourceImg, ok := evt.Data.(*image.RGBA)
-		if !ok {
-			logrus.Error("[ExploreMainWorker] e.Data.(*image.RGBA) not *image.RGBA")
-			return
-		}
-		detectived, err := e.objectDetective(sourceImg)
-		if err != nil {
-			logrus.Errorf("[ExploreMainWorker] ExploreMainWorker.objectDetective err: %v", err)
-		}
+Run:
+	for {
+		select {
+		case <-e.quit:
+			break Run
+		default:
+			img, err := e.cameraWorker.Capture()
+			if err != nil {
+				return
+			}
+			sourceImg, ok := img.(*image.RGBA)
+			if !ok {
+				logrus.Error("[ExploreMainWorker] e.Data.(*image.RGBA) not *image.RGBA")
+				return
+			}
+			detectived, err := e.objectDetective(sourceImg)
+			if err != nil {
+				logrus.Errorf("[ExploreMainWorker] ExploreMainWorker.objectDetective err: %v", err)
+			}
 
-		if e.config.ActivateCameraTransfer.True() {
-			_ = e.transferScreen(sourceImg, detectived)
+			if e.config.ActivateCameraTransfer.True() {
+				_ = e.transferScreen(sourceImg, detectived)
+			}
 		}
-		e.bus.Emit(cameraCaptureTopic, nil, "")
-	})
+	}
 }
 
 func (e *ExploreMainWorker) Restart() error {
@@ -61,6 +97,7 @@ func (e *ExploreMainWorker) Restart() error {
 }
 
 func (e *ExploreMainWorker) Stop() error {
+	e.quit <- struct{}{}
 	return nil
 }
 

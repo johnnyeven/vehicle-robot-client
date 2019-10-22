@@ -9,12 +9,13 @@ import (
 	bus2 "github.com/mustafaturan/bus"
 	"github.com/sirupsen/logrus"
 	"gocv.io/x/gocv"
+	"image"
 )
 
 const (
 	cameraExploreWorkerID     = "camera-explore-worker"
-	cameraCaptureTopic        = "camera.capture"
-	cameraCaptureEventHandler = "camera-capture-handler"
+	cameraCaptureTopic        = "camera.Capture"
+	cameraCaptureEventHandler = "camera-Capture-handler"
 )
 
 type CameraExploreWorker struct {
@@ -49,18 +50,26 @@ func (c *CameraExploreWorker) WorkerID() string {
 func (c *CameraExploreWorker) Start() {
 	c.bus.RegisterTopic(cameraCaptureTopic)
 	c.bus.RegisterHandler(cameraCaptureEventHandler, cameraCaptureTopic, func(e *bus2.Event) {
-		cameraImage := gocv.NewMat()
-		if !c.camera.Read(&cameraImage) {
-			return
-		}
-		img, err := cameraImage.ToImage()
+		img, err := c.Capture()
 		if err != nil {
-			fmt.Println("[CameraExploreWorker] cameraImage.ToImag err: ", err.Error())
 			return
 		}
 		c.bus.Emit(cameraCaptureResultTopic, img, "")
 	})
-	c.bus.Emit(cameraCaptureTopic, nil, "")
+}
+
+func (c *CameraExploreWorker) Capture() (img image.Image, err error) {
+	cameraImage := gocv.NewMat()
+	if !c.camera.Read(&cameraImage) {
+		return nil, fmt.Errorf("[CameraExploreWorker] Capture err")
+	}
+	img, err = cameraImage.ToImage()
+	if err != nil {
+		err = fmt.Errorf("[CameraExploreWorker] Capture cameraImage.ToImag err: %v", err)
+		return
+	}
+
+	return
 }
 
 func (c *CameraExploreWorker) Restart() error {

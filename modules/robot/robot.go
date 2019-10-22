@@ -92,6 +92,15 @@ func (r *Robot) AddWorker(w Worker) error {
 	return nil
 }
 
+func (r *Robot) GetWorker(workerID string) (w Worker) {
+	w, ok := r.workers[workerID]
+	if !ok {
+		return nil
+	}
+
+	return
+}
+
 func (r *Robot) RemoveWorker(workerID string) error {
 	w, ok := r.workers[workerID]
 	if !ok {

@@ -16,17 +16,13 @@ func init() {
 func createRobotExplore(robot *Robot, config *global.RobotConfiguration, messageBus *bus.MessageBus, robotClient *client.RobotClient) *gobot.Robot {
 	logrus.Info("initial explore robot...")
 
-	// 主业务逻辑控制器
-	//mainWorker := NewExploreMainWorker(robot, config, messageBus, robotClient)
-	//robot.AddWorker(mainWorker)
-
 	// 摄像头云台
 	//cameraHolderWorker := NewCameraHolderWorker(robot, messageBus, config)
 	//robot.AddWorker(cameraHolderWorker)
 
 	// 摄像头
-	//cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
-	//robot.AddWorker(cameraWorker)
+	cameraWorker := NewCameraExploreWorker(robot, messageBus, robotClient, config)
+	robot.AddWorker(cameraWorker)
 
 	// 马达控制器
 	//powerControlWorker := NewPowerWorker(robot, messageBus, config)
@@ -37,10 +33,13 @@ func createRobotExplore(robot *Robot, config *global.RobotConfiguration, message
 	//robot.AddWorker(distanceWorker)
 
 	// 姿态控制器
-	attitudeWorker := NewAttitudeMPU6050Worker(robot, messageBus, config)
+	//attitudeWorker := NewAttitudeMPU6050Worker(robot, messageBus, config)
+	attitudeWorker := NewAttitudeGY85Worker(robot, messageBus, config)
 	robot.AddWorker(attitudeWorker)
-	// attitudeWorker := NewAttitudeGY85Worker(robot, messageBus, config)
-	//robot.AddWorker(attitudeWorker)
+
+	// 主业务逻辑控制器
+	//mainWorker := NewExploreMainWorker(robot, config, messageBus, robotClient)
+	//robot.AddWorker(mainWorker)
 
 	r := gobot.NewRobot("VehicleRobotExplore")
 	return r
