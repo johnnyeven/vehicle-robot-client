@@ -74,23 +74,29 @@ func (c *CameraHolderWorker) Start() {
 
 	c.bus.RegisterTopic(CameraHolderTopic)
 	c.bus.RegisterHandler(cameraHolderEventHandler, CameraHolderTopic, func(e *bus2.Event) {
-		var err error
 		if evt, ok := e.Data.(*client.CameraHolderRequest); ok {
-			c.currentHorizonAngle = servoAngleChange(c.currentHorizonAngle, evt.HorizonOffset)
-			err = c.servoHorizon.Move(c.currentHorizonAngle)
-			if err != nil {
-				logrus.Errorf("[CameraHolderWorker] camera-holder-handler servoHorizon.Move err: %v, angle: %d, event: %+v", err, c.currentHorizonAngle, evt)
-			}
-
-			c.currentVerticalAngle = servoAngleChange(c.currentVerticalAngle, evt.VerticalOffset)
-			err = c.servoVertical.Move(c.currentVerticalAngle)
-			if err != nil {
-				logrus.Errorf("[CameraHolderWorker] camera-holder-handler servoVertical.Move err: %v, angle: %d, event: %+v", err, c.currentVerticalAngle, evt)
-			}
+			_ = c.Move(evt)
 		} else {
 			logrus.Errorf("[CameraHolderWorker] camera-holder-handler Data type err: %s", "not CameraHolderRequest struct")
 		}
 	})
+}
+
+func (c *CameraHolderWorker) Move(data *client.CameraHolderRequest) error {
+	c.currentHorizonAngle = servoAngleChange(c.currentHorizonAngle, data.HorizonOffset)
+	err := c.servoHorizon.Move(c.currentHorizonAngle)
+	if err != nil {
+		logrus.Errorf("[CameraHolderWorker] camera-holder-handler servoHorizon.Move err: %v, angle: %d, event: %+v", err, c.currentHorizonAngle, data)
+		return err
+	}
+
+	c.currentVerticalAngle = servoAngleChange(c.currentVerticalAngle, data.VerticalOffset)
+	err = c.servoVertical.Move(c.currentVerticalAngle)
+	if err != nil {
+		logrus.Errorf("[CameraHolderWorker] camera-holder-handler servoVertical.Move err: %v, angle: %d, event: %+v", err, c.currentVerticalAngle, data)
+	}
+
+	return err
 }
 
 func (c *CameraHolderWorker) Restart() error {

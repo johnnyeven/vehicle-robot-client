@@ -48,7 +48,7 @@ func (d *DistanceHCSR04Worker) Start() {
 			d.manualControl = false
 		}()
 
-		distance, err := d.measure(e.Data.(uint8))
+		distance, err := d.Measure(e.Data.(uint8))
 		if err != nil {
 			return
 		}
@@ -65,7 +65,7 @@ func (d *DistanceHCSR04Worker) Start() {
 			offset = -offset
 		}
 		d.currentHorizonAngle += offset
-		distance, err := d.measure(d.currentHorizonAngle)
+		distance, err := d.Measure(d.currentHorizonAngle)
 		if err != nil {
 			return
 		}
@@ -78,7 +78,7 @@ func (d *DistanceHCSR04Worker) Start() {
 	})
 }
 
-func (d *DistanceHCSR04Worker) measure(angle uint8) (float64, error) {
+func (d *DistanceHCSR04Worker) Measure(angle uint8) (float64, error) {
 	d.currentHorizonAngle = servoAngle(angle)
 	err := d.servoHorizon.Move(d.currentHorizonAngle)
 	if err != nil {

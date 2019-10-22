@@ -23,16 +23,21 @@ type ExploreMainWorker struct {
 	cli    *client.RobotClient
 	quit   chan struct{}
 
-	cameraWorker   *CameraExploreWorker
-	attitudeWorker *AttitudeGY85Worker
-	distanceWorker *DistanceHCSR04Worker
-	powerWorker    *PowerWorker
+	cameraWorker       *CameraExploreWorker
+	cameraHolderWorker *CameraHolderWorker
+	attitudeWorker     *AttitudeGY85Worker
+	distanceWorker     *DistanceHCSR04Worker
+	powerWorker        *PowerWorker
 }
 
 func NewExploreMainWorker(robot *Robot, config *global.RobotConfiguration, bus *bus.MessageBus, cli *client.RobotClient) *ExploreMainWorker {
 	cameraWorker, ok := robot.GetWorker(cameraExploreWorkerID).(*CameraExploreWorker)
 	if !ok {
 		logrus.Panicf("[ExploreMainWorker] robot.GetWorker(cameraExploreWorkerID).(*CameraExploreWorker) error")
+	}
+	cameraHolderWorker, ok := robot.GetWorker(cameraHolderWorkerID).(*CameraHolderWorker)
+	if !ok {
+		logrus.Panicf("[ExploreMainWorker] robot.GetWorker(cameraHolderWorkerID).(*CameraHolderWorker) error")
 	}
 	attitudeWorker, ok := robot.GetWorker(attitudeGY85WorkerID).(*AttitudeGY85Worker)
 	if !ok {
@@ -53,10 +58,11 @@ func NewExploreMainWorker(robot *Robot, config *global.RobotConfiguration, bus *
 		cli:    cli,
 		quit:   make(chan struct{}),
 
-		cameraWorker:   cameraWorker,
-		attitudeWorker: attitudeWorker,
-		distanceWorker: distanceWorker,
-		powerWorker:    powerWorker,
+		cameraWorker:       cameraWorker,
+		cameraHolderWorker: cameraHolderWorker,
+		attitudeWorker:     attitudeWorker,
+		distanceWorker:     distanceWorker,
+		powerWorker:        powerWorker,
 	}
 }
 
