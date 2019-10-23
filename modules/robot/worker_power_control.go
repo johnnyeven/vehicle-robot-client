@@ -72,7 +72,7 @@ func (c *PowerWorker) backward(speed uint8) error {
 }
 
 func (c *PowerWorker) turnLeft(speed uint8) error {
-	err := c.motorLeft.Off()
+	err := c.motorLeft.Backward(speed)
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func (c *PowerWorker) turnLeft(speed uint8) error {
 }
 
 func (c *PowerWorker) turnRight(speed uint8) error {
-	err := c.motorRight.Off()
+	err := c.motorRight.Backward(speed)
 	if err != nil {
 		return err
 	}

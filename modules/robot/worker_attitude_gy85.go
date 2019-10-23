@@ -7,7 +7,6 @@ import (
 	"github.com/johnnyeven/vehicle-robot-client/global"
 	"github.com/shantanubhadoria/go-kalmanfilter/kalmanfilter"
 	"github.com/sirupsen/logrus"
-	"gobot.io/x/gobot"
 	"gobot.io/x/gobot/platforms/firmata"
 	"time"
 )
@@ -67,49 +66,48 @@ func (a *AttitudeGY85Worker) WorkerID() string {
 	return attitudeGY85WorkerID
 }
 
+func (a *AttitudeGY85Worker) GetData() {
+	a.lastTime = time.Now()
+	err := a.accSensor.GetData()
+	if err != nil {
+		logrus.Errorf("[AttitudeGY85Worker] accSensor.GetData() err: %v", err)
+		return
+	}
+	err = a.gyroSensor.GetData()
+	if err != nil {
+		logrus.Errorf("[AttitudeGY85Worker] gyroSensor.GetData() err: %v", err)
+		return
+	}
+	err = a.compassSensor.GetData()
+	if err != nil {
+		logrus.Errorf("[AttitudeGY85Worker] compassSensor.GetData() err: %v", err)
+		return
+	}
+	fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d, Compass: %v", a.accSensor.Accelerometer, a.gyroSensor.Gyroscope, a.gyroSensor.Temperature, a.compassSensor.Compass)
+	a.Data.Accelerometer.X = a.accSensor.Accelerometer.X
+	a.Data.Accelerometer.Y = a.accSensor.Accelerometer.Y
+	a.Data.Accelerometer.Z = a.accSensor.Accelerometer.Z
+
+	a.Data.Gyroscope.X = a.gyroSensor.Gyroscope.X
+	a.Data.Gyroscope.Y = a.gyroSensor.Gyroscope.Y
+	a.Data.Gyroscope.Z = a.gyroSensor.Gyroscope.Z
+
+	a.Data.Temperature = float64(a.gyroSensor.Temperature)
+
+	a.Data.Compass.X = a.compassSensor.Compass.X
+	a.Data.Compass.Y = a.compassSensor.Compass.Y
+	a.Data.Compass.Z = a.compassSensor.Compass.Z
+
+	a.rectify()
+	a.calcAngle()
+	a.Data.EulerAngle.Z = a.compassSensor.Heading()
+}
+
 func (a *AttitudeGY85Worker) Start() {
 	err := a.calibration()
 	if err != nil {
-		logrus.Errorf("[AttitudeGY85Worker] calibration err: %v", err)
-		return
+		logrus.Panicf("[AttitudeGY85Worker] calibration err: %v", err)
 	}
-	gobot.Every(10*time.Millisecond, func() {
-		a.lastTime = time.Now()
-		err := a.accSensor.GetData()
-		if err != nil {
-			logrus.Errorf("[AttitudeGY85Worker] accSensor.GetData() err: %v", err)
-			return
-		}
-		err = a.gyroSensor.GetData()
-		if err != nil {
-			logrus.Errorf("[AttitudeGY85Worker] gyroSensor.GetData() err: %v", err)
-			return
-		}
-		err = a.compassSensor.GetData()
-		if err != nil {
-			logrus.Errorf("[AttitudeGY85Worker] compassSensor.GetData() err: %v", err)
-			return
-		}
-		fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d, Compass: %v", a.accSensor.Accelerometer, a.gyroSensor.Gyroscope, a.gyroSensor.Temperature, a.compassSensor.Compass)
-		a.Data.Accelerometer.X = a.accSensor.Accelerometer.X
-		a.Data.Accelerometer.Y = a.accSensor.Accelerometer.Y
-		a.Data.Accelerometer.Z = a.accSensor.Accelerometer.Z
-
-		a.Data.Gyroscope.X = a.gyroSensor.Gyroscope.X
-		a.Data.Gyroscope.Y = a.gyroSensor.Gyroscope.Y
-		a.Data.Gyroscope.Z = a.gyroSensor.Gyroscope.Z
-
-		a.Data.Temperature = float64(a.gyroSensor.Temperature)
-
-		a.Data.Compass.X = a.compassSensor.Compass.X
-		a.Data.Compass.Y = a.compassSensor.Compass.Y
-		a.Data.Compass.Z = a.compassSensor.Compass.Z
-
-		a.rectify()
-		a.calcAngle()
-		a.Data.EulerAngle.Z = a.compassSensor.Heading()
-		a.bus.Emit(AttitudeBroadcastTopic, a.Data, "")
-	})
 }
 
 // 数据校准

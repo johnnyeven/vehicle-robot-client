@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"image"
 	"image/jpeg"
+	"time"
 )
 
 const (
@@ -71,6 +72,14 @@ func (e *ExploreMainWorker) WorkerID() string {
 }
 
 func (e *ExploreMainWorker) Start() {
+	logrus.Info("[ExploreMainWorker] turn direction to north...")
+
+	// 小车朝向正北
+	e.ResetDirection()
+	logrus.Info("[ExploreMainWorker] direction to north complete, wait 5 second")
+
+	time.Sleep(5 * time.Second)
+
 Run:
 	for {
 		select {
@@ -105,6 +114,21 @@ func (e *ExploreMainWorker) Restart() error {
 func (e *ExploreMainWorker) Stop() error {
 	e.quit <- struct{}{}
 	return nil
+}
+
+func (e *ExploreMainWorker) ResetDirection() {
+	for {
+		e.attitudeWorker.GetData()
+		currentHeading := e.attitudeWorker.Data.Compass.Z
+		if currentHeading > 5 && currentHeading < 180 {
+			e.powerWorker.turnLeft(uint8(MaxPower))
+		} else if currentHeading < 355 && currentHeading >= 180 {
+			e.powerWorker.turnRight(uint8(MaxPower))
+		} else {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
 }
 
 func (e *ExploreMainWorker) objectDetective(sourceImg *image.RGBA) (resp []client.DetectivedObject, err error) {
