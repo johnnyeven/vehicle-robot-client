@@ -83,7 +83,6 @@ func (a *AttitudeGY85Worker) GetData() {
 		logrus.Errorf("[AttitudeGY85Worker] compassSensor.GetData() err: %v", err)
 		return
 	}
-	fmt.Printf("\rAcc: %v, Gyr: %v, Temp: %d, Compass: %v", a.accSensor.Accelerometer, a.gyroSensor.Gyroscope, a.gyroSensor.Temperature, a.compassSensor.Compass)
 	a.Data.Accelerometer.X = a.accSensor.Accelerometer.X
 	a.Data.Accelerometer.Y = a.accSensor.Accelerometer.Y
 	a.Data.Accelerometer.Z = a.accSensor.Accelerometer.Z

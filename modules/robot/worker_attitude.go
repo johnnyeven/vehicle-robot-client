@@ -22,7 +22,7 @@ func (a *AttitudeWorker) rectify() {
 	a.Data.Accelerometer.Y = a.Data.Accelerometer.Y / drivers.Adxl345LSB
 	a.Data.Accelerometer.Z = a.Data.Accelerometer.Z / drivers.Adxl345LSB
 
-	a.Data.Temperature = a.Data.Temperature/340.0 + 36.53
+	a.Data.Temperature = a.Data.Temperature/drivers.ITG3200TempLSB + drivers.ITG3200TempOffsetLSB
 
 	a.Data.Gyroscope.X = a.Data.Gyroscope.X / drivers.ITG3200LSB
 	a.Data.Gyroscope.Y = a.Data.Gyroscope.Y / drivers.ITG3200LSB
